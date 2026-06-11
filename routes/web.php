@@ -1,47 +1,52 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\GalleryCategoryController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\EventFrontendController;
-use App\Http\Controllers\GalleryFrontendController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\NewsFrontendController;
-use App\Http\Controllers\ProductFrontendController;
+use App\Http\Controllers\Frontend\AboutController;
+use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\EventController as FrontendEventController;
+use App\Http\Controllers\Frontend\GalleryController as FrontendGalleryController;
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\NewsController as FrontendNewsController;
+use App\Http\Controllers\Frontend\ProductController as FrontendProductController;
+use App\Http\Controllers\Frontend\SustainabilityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/about-us', [HomeController::class, 'about'])->name('about');
-Route::get('/products', [ProductFrontendController::class, 'index'])->name('products.index');
-Route::get('/products/{product:slug}', [ProductFrontendController::class, 'show'])->name('products.show');
-Route::get('/news', [NewsFrontendController::class, 'index'])->name('news.index');
-Route::get('/news/{news:slug}', [NewsFrontendController::class, 'show'])->name('news.show');
-Route::get('/events', [EventFrontendController::class, 'index'])->name('events.index');
-Route::get('/events/{event:slug}', [EventFrontendController::class, 'show'])->name('events.show');
-Route::get('/gallery', [GalleryFrontendController::class, 'index'])->name('gallery.index');
-Route::get('/sustainability', [HomeController::class, 'sustainability'])->name('sustainability');
+Route::get('/about-us', [AboutController::class, 'index'])->name('about');
+Route::get('/products', [FrontendProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product:slug}', [FrontendProductController::class, 'show'])->name('products.show');
+Route::get('/news', [FrontendNewsController::class, 'index'])->name('news.index');
+Route::get('/news/{news:slug}', [FrontendNewsController::class, 'show'])->name('news.show');
+Route::get('/events', [FrontendEventController::class, 'index'])->name('events.index');
+Route::get('/events/{event:slug}', [FrontendEventController::class, 'show'])->name('events.show');
+Route::get('/gallery', [FrontendGalleryController::class, 'index'])->name('gallery.index');
+Route::get('/sustainability', [SustainabilityController::class, 'index'])->name('sustainability');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+Route::redirect('/login', '/admin/login')->name('login');
 Route::get('/admin/login', [AdminAuthController::class, 'create'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'store'])->name('admin.login.store');
+Route::redirect('/dashboard', '/admin')->middleware(['auth', 'admin'])->name('dashboard');
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function (): void {
-        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('products', ProductController::class);
         Route::delete('/product-images/{productImage}', [ProductController::class, 'destroyImage'])->name('product-images.destroy');
@@ -63,7 +68,8 @@ Route::middleware(['auth', 'admin'])
         Route::put('/pages/{page}', [PageController::class, 'update'])->name('pages.update');
         Route::get('/settings', [SettingController::class, 'edit'])->name('settings.index');
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
-        Route::view('/profile', 'admin.placeholder', ['title' => 'Manage Profile'])->name('profile');
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
         Route::post('/logout', function (Request $request) {
             Auth::logout();

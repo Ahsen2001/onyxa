@@ -8,4 +8,10 @@
 @theme {
     --font-sans: 'Poppins', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-brand-brown: #8B5E3C;
+    --color-brand-green: #2E7D32;
+    --color-brand-cream: #FFF8EC;
+    --color-brand-gold: #D9A441;
+    --color-brand-dark: #2B2B2B;
+    --shadow-soft: 0 16px 40px rgb(43 43 43 / 0.08);
 }

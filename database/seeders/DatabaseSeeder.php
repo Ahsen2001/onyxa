@@ -17,6 +17,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminUserSeeder::class,
             SettingSeeder::class,
+            ProductCategorySeeder::class,
+            ProductSeeder::class,
+            NewsSeeder::class,
+            EventSeeder::class,
+            GalleryCategorySeeder::class,
+            GallerySeeder::class,
+            PageSeeder::class,
         ]);
     }
 }

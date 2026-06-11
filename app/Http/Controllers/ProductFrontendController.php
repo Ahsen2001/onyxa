@@ -58,6 +58,6 @@ class ProductFrontendController extends Controller
 
     private function whatsappNumber(): string
     {
-        return preg_replace('/\D+/', '', Setting::valueFor('company_whatsapp', Setting::valueFor('company_phone', '940000000000')));
+        return preg_replace('/\D+/', '', Setting::valueFor('whatsapp', Setting::valueFor('phone', '940000000000')));
     }
 }

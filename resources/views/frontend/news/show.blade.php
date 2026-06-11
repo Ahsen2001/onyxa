@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
-@section('title', $news->title.' - ONYXA Private Limited')
-@section('meta_description', $news->short_description ?? 'Read ONYXA Private Limited company news.')
+@section('title', $news->meta_title ?: $news->title.' - ONYXA Private Limited')
+@section('meta_description', $news->meta_description ?: ($news->short_description ?? 'Read ONYXA Private Limited company news.'))
+@section('canonical', route('news.show', $news))
+@section('og_type', 'article')
+@if ($news->featured_image)
+    @section('og_image', asset('storage/'.$news->featured_image))
+@endif
 
 @section('content')
     <section class="bg-[#FFF8EC] py-12">

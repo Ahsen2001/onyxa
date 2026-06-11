@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
-@section('title', $product->name.' - ONYXA Private Limited')
-@section('meta_description', $product->short_description ?? 'View ONYXA coconut shell handicraft product details.')
+@section('title', $product->meta_title ?: $product->name.' - ONYXA Private Limited')
+@section('meta_description', $product->meta_description ?: ($product->short_description ?? 'View ONYXA coconut shell handicraft product details.'))
+@section('canonical', route('products.show', $product))
+@section('og_type', 'product')
+@if ($product->main_image)
+    @section('og_image', asset('storage/'.$product->main_image))
+@endif
 
 @section('content')
     <section class="bg-[#FFF8EC] py-12">
@@ -17,7 +22,7 @@
                     </div>
                     <div class="mt-4 grid grid-cols-4 gap-3">
                         @foreach ($product->images as $image)
-                            <img src="{{ asset('storage/'.$image->image) }}" alt="{{ $image->alt_text ?? $product->name }}" class="aspect-square rounded-lg object-cover">
+                            <img src="{{ asset('storage/'.$image->image) }}" alt="{{ $image->alt_text ?: $product->name.' detail image' }}" class="aspect-square rounded-lg object-cover">
                         @endforeach
                     </div>
                 </div>

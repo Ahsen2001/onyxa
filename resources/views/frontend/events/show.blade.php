@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('title', $event->title.' - ONYXA Private Limited')
+@section('title', $event->meta_title ?: $event->title.' - ONYXA Private Limited')
+@section('meta_description', $event->meta_description ?: (string) str($event->description)->stripTags()->limit(155))
+@section('canonical', route('events.show', $event))
+@section('og_type', 'article')
+@if ($event->featured_image)
+    @section('og_image', asset('storage/'.$event->featured_image))
+@endif
 
 @section('content')
     <section class="bg-[#FFF8EC] py-12">

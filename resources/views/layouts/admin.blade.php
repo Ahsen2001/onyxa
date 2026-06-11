@@ -30,7 +30,7 @@
                         ['label' => 'Messages', 'route' => 'admin.contact-messages.index', 'active' => 'admin.contact-messages.*'],
                         ['label' => 'Pages', 'route' => 'admin.pages.index', 'active' => 'admin.pages.*'],
                         ['label' => 'Settings', 'route' => 'admin.settings.index', 'active' => 'admin.settings.*'],
-                        ['label' => 'Profile', 'route' => 'admin.profile', 'active' => 'admin.profile'],
+                        ['label' => 'Profile', 'route' => 'admin.profile.edit', 'active' => 'admin.profile.*'],
                     ];
                 @endphp
 
