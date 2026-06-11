@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\EventRequest;
 use App\Models\Event;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -27,9 +27,9 @@ class EventController extends Controller
         return view('admin.events.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(EventRequest $request): RedirectResponse
     {
-        $data = $this->validatedData($request);
+        $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['title']);
         $data['user_id'] = $request->user()->id;
 
@@ -54,9 +54,9 @@ class EventController extends Controller
         return view('admin.events.edit', compact('event'));
     }
 
-    public function update(Request $request, Event $event): RedirectResponse
+    public function update(EventRequest $request, Event $event): RedirectResponse
     {
-        $data = $this->validatedData($request);
+        $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['title'], $event->id);
 
         if ($request->hasFile('featured_image')) {
@@ -75,19 +75,6 @@ class EventController extends Controller
         $event->delete();
 
         return redirect()->route('admin.events.index')->with('success', 'Event deleted successfully.');
-    }
-
-    private function validatedData(Request $request): array
-    {
-        return $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'event_date' => ['required', 'date'],
-            'event_time' => ['nullable', 'date_format:H:i'],
-            'location' => ['nullable', 'string', 'max:255'],
-            'featured_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'status' => ['required', 'in:upcoming,completed,cancelled'],
-        ]);
     }
 
     private function uniqueSlug(string $title, ?int $ignoreId = null): string

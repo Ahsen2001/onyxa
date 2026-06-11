@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\GalleryCategoryRequest;
 use App\Models\GalleryCategory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -23,9 +23,9 @@ class GalleryCategoryController extends Controller
         return view('admin.gallery-categories.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(GalleryCategoryRequest $request): RedirectResponse
     {
-        $data = $this->validatedData($request);
+        $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['name']);
 
         GalleryCategory::create($data);
@@ -38,9 +38,9 @@ class GalleryCategoryController extends Controller
         return view('admin.gallery-categories.edit', compact('galleryCategory'));
     }
 
-    public function update(Request $request, GalleryCategory $galleryCategory): RedirectResponse
+    public function update(GalleryCategoryRequest $request, GalleryCategory $galleryCategory): RedirectResponse
     {
-        $data = $this->validatedData($request);
+        $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['name'], $galleryCategory->id);
 
         $galleryCategory->update($data);
@@ -57,14 +57,6 @@ class GalleryCategoryController extends Controller
         $galleryCategory->delete();
 
         return back()->with('success', 'Gallery category deleted successfully.');
-    }
-
-    private function validatedData(Request $request): array
-    {
-        return $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'status' => ['required', 'in:active,inactive'],
-        ]);
     }
 
     private function uniqueSlug(string $name, ?int $ignoreId = null): string

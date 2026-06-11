@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ProductRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
@@ -30,9 +31,9 @@ class ProductController extends Controller
         return view('admin.products.create', compact('categories'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ProductRequest $request): RedirectResponse
     {
-        $data = $this->validatedData($request);
+        $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['name']);
         $data['is_featured'] = $request->boolean('is_featured');
 
@@ -63,9 +64,9 @@ class ProductController extends Controller
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
-    public function update(Request $request, Product $product): RedirectResponse
+    public function update(ProductRequest $request, Product $product): RedirectResponse
     {
-        $data = $this->validatedData($request);
+        $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['name'], $product->id);
         $data['is_featured'] = $request->boolean('is_featured');
 
@@ -105,25 +106,6 @@ class ProductController extends Controller
         $productImage->delete();
 
         return back()->with('success', 'Product image deleted successfully.');
-    }
-
-    private function validatedData(Request $request): array
-    {
-        return $request->validate([
-            'product_category_id' => ['required', 'exists:product_categories,id'],
-            'name' => ['required', 'string', 'max:255'],
-            'short_description' => ['nullable', 'string', 'max:500'],
-            'description' => ['nullable', 'string'],
-            'material' => ['nullable', 'string', 'max:255'],
-            'size' => ['nullable', 'string', 'max:255'],
-            'price' => ['nullable', 'numeric', 'min:0'],
-            'main_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'additional_images' => ['nullable', 'array'],
-            'additional_images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'availability' => ['required', 'in:available,out_of_stock,made_to_order'],
-            'status' => ['required', 'in:draft,published,inactive'],
-            'is_featured' => ['nullable', 'boolean'],
-        ]);
     }
 
     private function storeAdditionalImages(Request $request, Product $product): void

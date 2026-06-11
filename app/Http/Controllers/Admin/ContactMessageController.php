@@ -5,15 +5,38 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ContactMessageController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $messages = ContactMessage::latest()->paginate(12);
+        $status = $request->string('status')->toString();
+        $search = trim($request->string('search')->toString());
 
-        return view('admin.contact-messages.index', compact('messages'));
+        $messages = ContactMessage::query()
+            ->when($status === 'unread', fn ($query) => $query->unread())
+            ->when($status === 'read', fn ($query) => $query->read())
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($messageQuery) use ($search): void {
+                    $messageQuery
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('subject', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(12)
+            ->withQueryString();
+
+        $counts = [
+            'all' => ContactMessage::count(),
+            'unread' => ContactMessage::unread()->count(),
+            'read' => ContactMessage::read()->count(),
+        ];
+
+        return view('admin.contact-messages.index', compact('messages', 'counts', 'status', 'search'));
     }
 
     public function show(ContactMessage $contactMessage): View

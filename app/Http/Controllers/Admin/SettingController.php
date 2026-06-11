@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\SettingRequest;
 use App\Models\Setting;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -16,25 +16,9 @@ class SettingController extends Controller
         return view('admin.settings.edit');
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(SettingRequest $request): RedirectResponse
     {
-        $data = $request->validate([
-            'company_name' => ['nullable', 'string', 'max:255'],
-            'tagline' => ['nullable', 'string', 'max:255'],
-            'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'favicon' => ['nullable', 'image', 'mimes:ico,png,jpg,jpeg,webp', 'max:1024'],
-            'email' => ['nullable', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:100'],
-            'whatsapp' => ['nullable', 'string', 'max:100'],
-            'address' => ['nullable', 'string'],
-            'business_hours' => ['nullable', 'string'],
-            'facebook_url' => ['nullable', 'url', 'max:255'],
-            'instagram_url' => ['nullable', 'url', 'max:255'],
-            'linkedin_url' => ['nullable', 'url', 'max:255'],
-            'youtube_url' => ['nullable', 'url', 'max:255'],
-            'google_map_embed' => ['nullable', 'string'],
-            'footer_text' => ['nullable', 'string'],
-        ]);
+        $data = $request->validated();
 
         foreach (['logo', 'favicon'] as $imageKey) {
             if ($request->hasFile($imageKey)) {

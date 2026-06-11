@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\GalleryRequest;
 use App\Models\Gallery;
 use App\Models\GalleryCategory;
 use Illuminate\Http\RedirectResponse;
@@ -31,9 +32,9 @@ class GalleryController extends Controller
         return view('admin.galleries.create', compact('categories'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(GalleryRequest $request): RedirectResponse
     {
-        $data = $this->validatedData($request, true);
+        $data = $request->validated();
         $data['image'] = $request->file('image')->store('gallery', 'public');
         $data['alt_text'] = $data['title'] ?? 'ONYXA gallery image';
 
@@ -49,9 +50,9 @@ class GalleryController extends Controller
         return view('admin.galleries.edit', compact('gallery', 'categories'));
     }
 
-    public function update(Request $request, Gallery $gallery): RedirectResponse
+    public function update(GalleryRequest $request, Gallery $gallery): RedirectResponse
     {
-        $data = $this->validatedData($request);
+        $data = $request->validated();
         $data['alt_text'] = $data['title'] ?? 'ONYXA gallery image';
 
         if ($request->hasFile('image')) {
@@ -72,14 +73,4 @@ class GalleryController extends Controller
         return back()->with('success', 'Gallery image deleted successfully.');
     }
 
-    private function validatedData(Request $request, bool $imageRequired = false): array
-    {
-        return $request->validate([
-            'gallery_category_id' => ['nullable', 'exists:gallery_categories,id'],
-            'title' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'image' => [$imageRequired ? 'required' : 'nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'status' => ['required', 'in:active,inactive'],
-        ]);
-    }
 }

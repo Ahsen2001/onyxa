@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\NewsRequest;
 use App\Models\News;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -24,9 +24,9 @@ class NewsController extends Controller
         return view('admin.news.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(NewsRequest $request): RedirectResponse
     {
-        $data = $this->validatedData($request);
+        $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['title']);
         $data['user_id'] = $request->user()->id;
         $data['published_at'] = $data['status'] === 'published'
@@ -54,9 +54,9 @@ class NewsController extends Controller
         return view('admin.news.edit', compact('news'));
     }
 
-    public function update(Request $request, News $news): RedirectResponse
+    public function update(NewsRequest $request, News $news): RedirectResponse
     {
-        $data = $this->validatedData($request);
+        $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['title'], $news->id);
         $data['published_at'] = $data['status'] === 'published'
             ? ($data['published_at'] ?? now())
@@ -78,18 +78,6 @@ class NewsController extends Controller
         $news->delete();
 
         return redirect()->route('admin.news.index')->with('success', 'News post deleted successfully.');
-    }
-
-    private function validatedData(Request $request): array
-    {
-        return $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'short_description' => ['nullable', 'string', 'max:500'],
-            'content' => ['required', 'string'],
-            'featured_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'status' => ['required', 'in:draft,published'],
-            'published_at' => ['nullable', 'date'],
-        ]);
     }
 
     private function uniqueSlug(string $title, ?int $ignoreId = null): string
