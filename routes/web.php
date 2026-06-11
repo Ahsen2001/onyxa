@@ -1,13 +1,15 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\ProductCategoryController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::view('/about-us', 'frontend.page', ['title' => 'About Us'])->name('about');
+Route::get('/about-us', [HomeController::class, 'about'])->name('about');
 Route::view('/products', 'frontend.page', ['title' => 'Products'])->name('products.index');
 Route::view('/news', 'frontend.page', ['title' => 'News'])->name('news.index');
 Route::view('/events', 'frontend.page', ['title' => 'Events'])->name('events.index');
@@ -21,8 +23,11 @@ Route::middleware(['auth', 'admin'])
     ->group(function (): void {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        Route::view('/products', 'admin.placeholder', ['title' => 'Manage Products'])->name('products.index');
-        Route::view('/product-categories', 'admin.placeholder', ['title' => 'Manage Product Categories'])->name('product-categories.index');
+        Route::resource('products', ProductController::class);
+        Route::delete('/product-images/{productImage}', [ProductController::class, 'destroyImage'])->name('product-images.destroy');
+        Route::resource('product-categories', ProductCategoryController::class)
+            ->parameters(['product-categories' => 'productCategory'])
+            ->except(['show']);
         Route::view('/news', 'admin.placeholder', ['title' => 'Manage News'])->name('news.index');
         Route::view('/events', 'admin.placeholder', ['title' => 'Manage Events'])->name('events.index');
         Route::view('/gallery-categories', 'admin.placeholder', ['title' => 'Manage Gallery Categories'])->name('gallery-categories.index');

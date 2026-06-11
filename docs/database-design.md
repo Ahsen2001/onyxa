@@ -53,7 +53,8 @@ Stores coconut shell handicraft products.
 | `price` | DECIMAL(10,2) | Nullable |  | Optional product price. |
 | `main_image` | VARCHAR(255) | Nullable |  | Main product image path. |
 | `material` | VARCHAR(255) | Nullable |  | Materials used. |
-| `dimensions` | VARCHAR(255) | Nullable |  | Product size or dimensions. |
+| `size` | VARCHAR(255) | Nullable |  | Product size or dimensions. |
+| `availability` | ENUM('available','out_of_stock','made_to_order') | Required |  | Product availability status. |
 | `is_featured` | BOOLEAN | Required |  | Marks product for homepage/featured sections. |
 | `status` | ENUM('draft','published','inactive') | Required |  | Product publishing status. |
 | `meta_title` | VARCHAR(255) | Nullable |  | SEO title. |

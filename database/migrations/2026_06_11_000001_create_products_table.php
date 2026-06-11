@@ -19,7 +19,8 @@ return new class extends Migration
             $table->decimal('price', 10, 2)->nullable();
             $table->string('main_image')->nullable();
             $table->string('material')->nullable();
-            $table->string('dimensions')->nullable();
+            $table->string('size')->nullable();
+            $table->enum('availability', ['available', 'out_of_stock', 'made_to_order'])->default('available');
             $table->boolean('is_featured')->default(false);
             $table->enum('status', ['draft', 'published', 'inactive'])->default('draft');
             $table->string('meta_title')->nullable();

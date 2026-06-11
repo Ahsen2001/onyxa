@@ -20,23 +20,23 @@
             <nav class="grid gap-1 px-4 pb-5 text-sm lg:pb-8">
                 @php
                     $menu = [
-                        ['label' => 'Dashboard', 'route' => 'admin.dashboard'],
-                        ['label' => 'Products', 'route' => 'admin.products.index'],
-                        ['label' => 'Categories', 'route' => 'admin.product-categories.index'],
-                        ['label' => 'News', 'route' => 'admin.news.index'],
-                        ['label' => 'Events', 'route' => 'admin.events.index'],
-                        ['label' => 'Gallery', 'route' => 'admin.galleries.index'],
-                        ['label' => 'Gallery Categories', 'route' => 'admin.gallery-categories.index'],
-                        ['label' => 'Messages', 'route' => 'admin.contact-messages.index'],
-                        ['label' => 'Pages', 'route' => 'admin.pages.index'],
-                        ['label' => 'Settings', 'route' => 'admin.settings.index'],
-                        ['label' => 'Profile', 'route' => 'admin.profile'],
+                        ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'active' => 'admin.dashboard'],
+                        ['label' => 'Products', 'route' => 'admin.products.index', 'active' => 'admin.products.*'],
+                        ['label' => 'Categories', 'route' => 'admin.product-categories.index', 'active' => 'admin.product-categories.*'],
+                        ['label' => 'News', 'route' => 'admin.news.index', 'active' => 'admin.news.*'],
+                        ['label' => 'Events', 'route' => 'admin.events.index', 'active' => 'admin.events.*'],
+                        ['label' => 'Gallery', 'route' => 'admin.galleries.index', 'active' => 'admin.galleries.*'],
+                        ['label' => 'Gallery Categories', 'route' => 'admin.gallery-categories.index', 'active' => 'admin.gallery-categories.*'],
+                        ['label' => 'Messages', 'route' => 'admin.contact-messages.index', 'active' => 'admin.contact-messages.*'],
+                        ['label' => 'Pages', 'route' => 'admin.pages.index', 'active' => 'admin.pages.*'],
+                        ['label' => 'Settings', 'route' => 'admin.settings.index', 'active' => 'admin.settings.*'],
+                        ['label' => 'Profile', 'route' => 'admin.profile', 'active' => 'admin.profile'],
                     ];
                 @endphp
 
                 @foreach ($menu as $item)
                     <a href="{{ route($item['route']) }}"
-                       class="rounded-lg px-4 py-3 transition {{ request()->routeIs($item['route']) ? 'bg-[#8B5E3C] text-white shadow-lg shadow-black/10' : 'text-white/75 hover:bg-white/10 hover:text-white' }}">
+                       class="rounded-lg px-4 py-3 transition {{ request()->routeIs($item['active']) ? 'bg-[#8B5E3C] text-white shadow-lg shadow-black/10' : 'text-white/75 hover:bg-white/10 hover:text-white' }}">
                         {{ $item['label'] }}
                     </a>
                 @endforeach
@@ -64,6 +64,29 @@
             </header>
 
             <div class="px-5 py-6 md:px-8">
+                @if (session('success'))
+                    <div class="mb-5 rounded-lg border border-[#2E7D32]/20 bg-[#2E7D32]/10 px-4 py-3 text-sm font-medium text-[#2E7D32]">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        <p class="font-semibold">Please fix the following:</p>
+                        <ul class="mt-2 list-inside list-disc">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </main>

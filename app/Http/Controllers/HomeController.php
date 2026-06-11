@@ -36,4 +36,9 @@ class HomeController extends Controller
                 ->get(),
         ]);
     }
+
+    public function about(): View
+    {
+        return view('frontend.about');
+    }
 }
