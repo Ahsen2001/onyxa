@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Event extends Model
 {
     protected $fillable = [
-        'author_id',
+        'user_id',
         'title',
         'slug',
         'description',
@@ -28,21 +28,21 @@ class Event extends Model
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function scopePublished(Builder $query): Builder
+    public function user(): BelongsTo
     {
-        return $query->where('status', 'published');
+        return $this->belongsTo(User::class);
     }
 
     public function scopeUpcoming(Builder $query): Builder
     {
-        return $query->published()->whereDate('event_date', '>=', now()->toDateString());
+        return $query->where('status', 'upcoming')->whereDate('event_date', '>=', now()->toDateString());
     }
 
-    public function scopePast(Builder $query): Builder
+    public function scopeCompleted(Builder $query): Builder
     {
-        return $query->whereDate('event_date', '<', now()->toDateString());
+        return $query->where('status', 'completed');
     }
 }

@@ -55,12 +55,12 @@ class User extends Authenticatable
 
     public function news(): HasMany
     {
-        return $this->hasMany(News::class, 'author_id');
+        return $this->hasMany(News::class);
     }
 
     public function events(): HasMany
     {
-        return $this->hasMany(Event::class, 'author_id');
+        return $this->hasMany(Event::class);
     }
 
     public function scopeAdmins(Builder $query): Builder

@@ -89,18 +89,18 @@ Stores company news articles.
 | `id` | BIGINT UNSIGNED AUTO_INCREMENT | Required | Primary Key | Unique news ID. |
 | `title` | VARCHAR(255) | Required |  | News title. |
 | `slug` | VARCHAR(255) | Required | Unique | SEO-friendly news URL. |
-| `summary` | VARCHAR(500) | Nullable |  | Short article preview. |
+| `short_description` | VARCHAR(500) | Nullable |  | Short article preview. |
 | `content` | LONGTEXT | Required |  | Full article body. |
 | `featured_image` | VARCHAR(255) | Nullable |  | News image path. |
-| `author_id` | BIGINT UNSIGNED | Nullable | Foreign Key | References `users.id`. |
-| `status` | ENUM('draft','published','archived') | Required |  | Article publishing status. |
+| `user_id` | BIGINT UNSIGNED | Nullable | Foreign Key | References `users.id`. |
+| `status` | ENUM('draft','published') | Required |  | Article publishing status. |
 | `published_at` | DATETIME | Nullable |  | Public publishing date/time. |
 | `meta_title` | VARCHAR(255) | Nullable |  | SEO title. |
 | `meta_description` | VARCHAR(500) | Nullable |  | SEO description. |
 | `created_at` | TIMESTAMP | Nullable |  | Record creation time. |
 | `updated_at` | TIMESTAMP | Nullable |  | Last update time. |
 
-Foreign key: `author_id` references `users.id` with null on delete.
+Foreign key: `user_id` references `users.id` with null on delete.
 
 ## 6. `events`
 
@@ -109,7 +109,7 @@ Stores exhibitions, fairs, workshops, and company events.
 | Column | Data Type | Null | Key | Purpose |
 | --- | --- | --- | --- | --- |
 | `id` | BIGINT UNSIGNED AUTO_INCREMENT | Required | Primary Key | Unique event ID. |
-| `author_id` | BIGINT UNSIGNED | Nullable | Foreign Key | References `users.id`. |
+| `user_id` | BIGINT UNSIGNED | Nullable | Foreign Key | References `users.id`. |
 | `title` | VARCHAR(255) | Required |  | Event title. |
 | `slug` | VARCHAR(255) | Required | Unique | SEO-friendly event URL. |
 | `description` | LONGTEXT | Required |  | Full event description. |
@@ -117,13 +117,13 @@ Stores exhibitions, fairs, workshops, and company events.
 | `event_date` | DATE | Required |  | Event date. |
 | `event_time` | TIME | Nullable |  | Event time. |
 | `featured_image` | VARCHAR(255) | Nullable |  | Event image path. |
-| `status` | ENUM('draft','published','completed','cancelled') | Required |  | Event lifecycle status. |
+| `status` | ENUM('upcoming','completed','cancelled') | Required |  | Event lifecycle status. |
 | `meta_title` | VARCHAR(255) | Nullable |  | SEO title. |
 | `meta_description` | VARCHAR(500) | Nullable |  | SEO description. |
 | `created_at` | TIMESTAMP | Nullable |  | Record creation time. |
 | `updated_at` | TIMESTAMP | Nullable |  | Last update time. |
 
-Foreign key: `author_id` references `users.id` with null on delete.
+Foreign key: `user_id` references `users.id` with null on delete.
 
 ## 7. `gallery_categories`
 

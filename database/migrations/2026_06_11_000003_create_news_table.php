@@ -10,13 +10,13 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('author_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('summary', 500)->nullable();
+            $table->string('short_description', 500)->nullable();
             $table->longText('content');
             $table->string('featured_image')->nullable();
-            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
+            $table->enum('status', ['draft', 'published'])->default('draft');
             $table->dateTime('published_at')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description', 500)->nullable();

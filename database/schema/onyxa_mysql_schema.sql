@@ -64,26 +64,26 @@ CREATE TABLE product_images (
 
 CREATE TABLE news (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NULL,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
-    summary VARCHAR(500) NULL,
+    short_description VARCHAR(500) NULL,
     content LONGTEXT NOT NULL,
     featured_image VARCHAR(255) NULL,
-    author_id BIGINT UNSIGNED NULL,
-    status ENUM('draft', 'published', 'archived') NOT NULL DEFAULT 'draft',
+    status ENUM('draft', 'published') NOT NULL DEFAULT 'draft',
     published_at DATETIME NULL,
     meta_title VARCHAR(255) NULL,
     meta_description VARCHAR(500) NULL,
     created_at TIMESTAMP NULL,
     updated_at TIMESTAMP NULL,
-    CONSTRAINT news_author_id_foreign
-        FOREIGN KEY (author_id) REFERENCES users(id)
+    CONSTRAINT news_user_id_foreign
+        FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE SET NULL
 );
 
 CREATE TABLE events (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    author_id BIGINT UNSIGNED NULL,
+    user_id BIGINT UNSIGNED NULL,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
     description LONGTEXT NOT NULL,
@@ -91,13 +91,13 @@ CREATE TABLE events (
     event_date DATE NOT NULL,
     event_time TIME NULL,
     featured_image VARCHAR(255) NULL,
-    status ENUM('draft', 'published', 'completed', 'cancelled') NOT NULL DEFAULT 'draft',
+    status ENUM('upcoming', 'completed', 'cancelled') NOT NULL DEFAULT 'upcoming',
     meta_title VARCHAR(255) NULL,
     meta_description VARCHAR(500) NULL,
     created_at TIMESTAMP NULL,
     updated_at TIMESTAMP NULL,
-    CONSTRAINT events_author_id_foreign
-        FOREIGN KEY (author_id) REFERENCES users(id)
+    CONSTRAINT events_user_id_foreign
+        FOREIGN KEY (user_id) REFERENCES users(id)
         ON DELETE SET NULL
 );
 

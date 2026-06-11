@@ -42,8 +42,8 @@ Each migration includes timestamps and the required foreign keys:
 
 - `products.product_category_id` references `product_categories.id`
 - `product_images.product_id` references `products.id`
-- `news.author_id` references `users.id`
-- `events.author_id` references `users.id`
+- `news.user_id` references `users.id`
+- `events.user_id` references `users.id`
 - `galleries.gallery_category_id` references `gallery_categories.id`
 
 ## Model Files

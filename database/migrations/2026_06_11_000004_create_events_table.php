@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('author_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('title');
             $table->string('slug')->unique();
             $table->longText('description');
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('event_date');
             $table->time('event_time')->nullable();
             $table->string('featured_image')->nullable();
-            $table->enum('status', ['draft', 'published', 'completed', 'cancelled'])->default('draft');
+            $table->enum('status', ['upcoming', 'completed', 'cancelled'])->default('upcoming');
             $table->string('meta_title')->nullable();
             $table->string('meta_description', 500)->nullable();
             $table->timestamps();
