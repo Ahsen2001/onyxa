@@ -41,4 +41,9 @@ class HomeController extends Controller
     {
         return view('frontend.about');
     }
+
+    public function sustainability(): View
+    {
+        return view('frontend.sustainability.index');
+    }
 }

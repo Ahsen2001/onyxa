@@ -1,0 +1,6 @@
+@extends('layouts.admin')
+@section('title','Message from '.$contactMessage->name)
+@section('page-title','Contact Message')
+@section('content')
+    <article class="rounded-xl border border-[#E8DCCB] bg-white p-6 shadow-sm"><div class="mb-6 flex gap-3"><a href="{{ route('admin.contact-messages.index') }}" class="rounded-lg border border-[#DCC9AD] px-4 py-2 text-sm font-semibold text-[#8B5E3C]">Back</a><form method="POST" action="{{ route('admin.contact-messages.read',$contactMessage) }}">@csrf @method('PATCH')<button class="rounded-lg bg-[#2E7D32] px-4 py-2 text-sm font-semibold text-white">Mark Read</button></form></div><dl class="grid gap-4 md:grid-cols-2"><div><dt class="text-sm text-[#6F665A]">Name</dt><dd class="font-semibold">{{ $contactMessage->name }}</dd></div><div><dt class="text-sm text-[#6F665A]">Email</dt><dd class="font-semibold">{{ $contactMessage->email }}</dd></div><div><dt class="text-sm text-[#6F665A]">Phone</dt><dd class="font-semibold">{{ $contactMessage->phone ?? '-' }}</dd></div><div><dt class="text-sm text-[#6F665A]">Subject</dt><dd class="font-semibold">{{ $contactMessage->subject ?? '-' }}</dd></div></dl><div class="mt-6"><h2 class="font-semibold">Message</h2><p class="mt-2 whitespace-pre-line leading-8 text-[#5F584F]">{{ $contactMessage->message }}</p></div></article>
+@endsection

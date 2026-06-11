@@ -14,7 +14,7 @@
                 </h1>
                 <p class="mt-4 text-2xl font-medium text-[#8B5E3C]">Crafting Nature into Timeless Art</p>
                 <p class="mt-6 max-w-2xl text-lg leading-8 text-[#5F584F]">
-                    We transform coconut shells into refined handmade pieces that bring natural warmth, practical beauty, and sustainable craftsmanship into modern spaces.
+                    {{ page_section('home', 'introduction', 'content', 'We transform coconut shells into refined handmade pieces that bring natural warmth, practical beauty, and sustainable craftsmanship into modern spaces.') }}
                 </p>
                 <div class="mt-8 flex flex-wrap gap-3">
                     <a href="{{ route('products.index') }}" class="rounded-lg bg-[#8B5E3C] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#724A2E]">Explore Products</a>

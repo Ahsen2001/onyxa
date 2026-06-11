@@ -1,0 +1,52 @@
+@extends('layouts.app')
+
+@section('title', 'Contact Us - ONYXA Private Limited')
+
+@section('content')
+    <section class="bg-[#FFF8EC] py-16">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-[#2E7D32]">Contact</p>
+            <h1 class="mt-3 text-4xl font-semibold">Talk to ONYXA</h1>
+            <div class="mt-10 grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
+                <aside class="rounded-xl border border-[#E8DCCB] bg-white p-6 shadow-sm">
+                    <div class="grid gap-5 text-[#5F584F]">
+                        <p><strong class="text-[#2B2B2B]">Address:</strong><br>{{ setting('address', 'Sri Lanka') }}</p>
+                        <p><strong class="text-[#2B2B2B]">Email:</strong><br>{{ setting('email', 'info@onyxa.com') }}</p>
+                        <p><strong class="text-[#2B2B2B]">Phone:</strong><br>{{ setting('phone', '+94 00 000 0000') }}</p>
+                        <p><strong class="text-[#2B2B2B]">WhatsApp:</strong><br>{{ setting('whatsapp', '+94 00 000 0000') }}</p>
+                        <p><strong class="text-[#2B2B2B]">Business Hours:</strong><br>{{ setting('business_hours', 'Monday - Friday, 9.00 AM - 5.00 PM') }}</p>
+                    </div>
+                </aside>
+
+                <div class="rounded-xl border border-[#E8DCCB] bg-white p-6 shadow-sm">
+                    @if (session('success'))
+                        <div class="mb-5 rounded-lg bg-[#2E7D32]/10 px-4 py-3 text-sm font-semibold text-[#2E7D32]">{{ session('success') }}</div>
+                    @endif
+                    <form method="POST" action="{{ route('contact.store') }}" class="grid gap-5">
+                        @csrf
+                        <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off">
+                        <div class="grid gap-5 md:grid-cols-2">
+                            <input name="name" value="{{ old('name') }}" placeholder="Your name" required class="rounded-lg border border-[#DCC9AD] px-4 py-3">
+                            <input type="email" name="email" value="{{ old('email') }}" placeholder="Email address" required class="rounded-lg border border-[#DCC9AD] px-4 py-3">
+                        </div>
+                        <div class="grid gap-5 md:grid-cols-2">
+                            <input name="phone" value="{{ old('phone') }}" placeholder="Phone" class="rounded-lg border border-[#DCC9AD] px-4 py-3">
+                            <input name="subject" value="{{ old('subject') }}" placeholder="Subject" class="rounded-lg border border-[#DCC9AD] px-4 py-3">
+                        </div>
+                        <textarea name="message" rows="6" placeholder="Message" required class="rounded-lg border border-[#DCC9AD] px-4 py-3">{{ old('message') }}</textarea>
+                        @error('message')<p class="text-sm text-red-700">{{ $message }}</p>@enderror
+                        <button class="rounded-lg bg-[#8B5E3C] px-5 py-3 text-sm font-semibold text-white">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt-8 overflow-hidden rounded-xl border border-[#E8DCCB] bg-white p-4">
+                @if (setting('google_map_embed'))
+                    {!! setting('google_map_embed') !!}
+                @else
+                    <div class="flex h-72 items-center justify-center rounded-lg bg-[#EAD7BD] text-[#8B5E3C]">Google map section</div>
+                @endif
+            </div>
+        </div>
+    </section>
+@endsection

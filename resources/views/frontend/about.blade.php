@@ -20,10 +20,10 @@
         <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
             <div>
                 <p class="text-sm font-semibold uppercase tracking-[0.18em] text-[#8B5E3C]">Company Introduction</p>
-                <h2 class="mt-3 text-3xl font-semibold">A modern craft company rooted in nature</h2>
+                <h2 class="mt-3 text-3xl font-semibold">{{ page_section('about', 'about_us', 'title', 'A modern craft company rooted in nature') }}</h2>
             </div>
             <p class="text-lg leading-8 text-[#5F584F]">
-                We design and produce coconut shell handicrafts that combine natural beauty, careful handwork, and practical use. Our collections are made for customers who value sustainable materials, meaningful gifts, and warm organic design.
+                {{ page_section('about', 'about_us', 'content', 'We design and produce coconut shell handicrafts that combine natural beauty, careful handwork, and practical use. Our collections are made for customers who value sustainable materials, meaningful gifts, and warm organic design.') }}
             </p>
         </div>
     </section>
@@ -49,15 +49,15 @@
     <section class="bg-white py-16">
         <div class="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
             <div class="rounded-xl border border-[#E8DCCB] bg-[#FFF8EC] p-8">
-                <h2 class="text-2xl font-semibold text-[#8B5E3C]">Vision</h2>
+                <h2 class="text-2xl font-semibold text-[#8B5E3C]">{{ page_section('about', 'vision', 'title', 'Vision') }}</h2>
                 <p class="mt-4 leading-8 text-[#5F584F]">
-                    To become a trusted name in eco-friendly coconut shell handicrafts, known for sustainable design, quality craftsmanship, and products that bring nature into everyday living.
+                    {{ page_section('about', 'vision', 'content', 'To become a trusted name in eco-friendly coconut shell handicrafts, known for sustainable design, quality craftsmanship, and products that bring nature into everyday living.') }}
                 </p>
             </div>
             <div class="rounded-xl border border-[#E8DCCB] bg-[#FFF8EC] p-8">
-                <h2 class="text-2xl font-semibold text-[#8B5E3C]">Mission</h2>
+                <h2 class="text-2xl font-semibold text-[#8B5E3C]">{{ page_section('about', 'mission', 'title', 'Mission') }}</h2>
                 <p class="mt-4 leading-8 text-[#5F584F]">
-                    To create beautiful handmade products from coconut shells while supporting responsible material use, preserving craft traditions, and delivering lasting value to customers.
+                    {{ page_section('about', 'mission', 'content', 'To create beautiful handmade products from coconut shells while supporting responsible material use, preserving craft traditions, and delivering lasting value to customers.') }}
                 </p>
             </div>
         </div>

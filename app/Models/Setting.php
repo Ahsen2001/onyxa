@@ -23,4 +23,12 @@ class Setting extends Model
     {
         return static::query()->where('key', $key)->value('value') ?? $default;
     }
+
+    public static function setValue(string $key, mixed $value, string $type = 'text', ?string $groupName = null): self
+    {
+        return static::updateOrCreate(
+            ['key' => $key],
+            ['value' => $value, 'type' => $type, 'group_name' => $groupName]
+        );
+    }
 }

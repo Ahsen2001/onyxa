@@ -2,14 +2,15 @@
     <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
             <div class="flex items-center gap-3">
-                <img src="{{ asset('logo.jpg') }}" alt="ONYXA logo" class="h-12 w-12 rounded-full object-cover ring-2 ring-[#D9A441]">
+                @php($logo = setting('logo'))
+                <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.jpg') }}" alt="ONYXA logo" class="h-12 w-12 rounded-full object-cover ring-2 ring-[#D9A441]">
                 <div>
-                    <p class="font-semibold">ONYXA Private Limited</p>
-                    <p class="text-xs uppercase tracking-[0.18em] text-[#D9A441]">Natural Handicrafts</p>
+                    <p class="font-semibold">{{ setting('company_name', 'ONYXA Private Limited') }}</p>
+                    <p class="text-xs uppercase tracking-[0.18em] text-[#D9A441]">{{ setting('tagline', 'Natural Handicrafts') }}</p>
                 </div>
             </div>
             <p class="mt-4 text-sm leading-6 text-white/70">
-                Crafting refined coconut shell handicrafts that celebrate Sri Lankan artistry, natural textures, and sustainable living.
+                {{ page_section('footer', 'description', 'content', setting('footer_text', 'Crafting refined coconut shell handicrafts that celebrate Sri Lankan artistry, natural textures, and sustainable living.')) }}
             </p>
         </div>
 
@@ -27,19 +28,20 @@
         <div>
             <h3 class="font-semibold text-[#D9A441]">Contact Info</h3>
             <div class="mt-4 space-y-2 text-sm text-white/70">
-                <p>ONYXA Private Limited</p>
-                <p>Sri Lanka</p>
-                <p>info@onyxa.com</p>
-                <p>+94 00 000 0000</p>
+                <p>{{ setting('company_name', 'ONYXA Private Limited') }}</p>
+                <p>{{ setting('address', 'Sri Lanka') }}</p>
+                <p>{{ setting('email', 'info@onyxa.com') }}</p>
+                <p>{{ setting('phone', '+94 00 000 0000') }}</p>
             </div>
         </div>
 
         <div>
             <h3 class="font-semibold text-[#D9A441]">Social Media</h3>
             <div class="mt-4 flex flex-wrap gap-2">
-                @foreach (['Facebook', 'Instagram', 'LinkedIn', 'YouTube'] as $social)
-                    <a href="#" class="rounded-full border border-white/15 px-3 py-2 text-sm text-white/70 transition hover:border-[#D9A441] hover:text-[#D9A441]">{{ $social }}</a>
-                @endforeach
+                <a href="{{ setting('facebook_url', '#') }}" class="rounded-full border border-white/15 px-3 py-2 text-sm text-white/70 transition hover:border-[#D9A441] hover:text-[#D9A441]">Facebook</a>
+                <a href="{{ setting('instagram_url', '#') }}" class="rounded-full border border-white/15 px-3 py-2 text-sm text-white/70 transition hover:border-[#D9A441] hover:text-[#D9A441]">Instagram</a>
+                <a href="{{ setting('linkedin_url', '#') }}" class="rounded-full border border-white/15 px-3 py-2 text-sm text-white/70 transition hover:border-[#D9A441] hover:text-[#D9A441]">LinkedIn</a>
+                <a href="{{ setting('youtube_url', '#') }}" class="rounded-full border border-white/15 px-3 py-2 text-sm text-white/70 transition hover:border-[#D9A441] hover:text-[#D9A441]">YouTube</a>
             </div>
         </div>
     </div>

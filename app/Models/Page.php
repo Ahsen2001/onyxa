@@ -9,9 +9,11 @@ class Page extends Model
 {
     protected $fillable = [
         'page_key',
+        'section_key',
         'title',
         'slug',
         'content',
+        'image',
         'featured_image',
         'meta_title',
         'meta_description',
