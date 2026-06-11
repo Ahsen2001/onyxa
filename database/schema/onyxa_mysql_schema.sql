@@ -4,7 +4,7 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     email_verified_at TIMESTAMP NULL,
     password VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'super_admin') NOT NULL DEFAULT 'admin',
+    role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
     profile_image VARCHAR(255) NULL,
     phone VARCHAR(50) NULL,
     status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
@@ -82,6 +82,7 @@ CREATE TABLE news (
 
 CREATE TABLE events (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    author_id BIGINT UNSIGNED NULL,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
     description LONGTEXT NOT NULL,
@@ -93,7 +94,10 @@ CREATE TABLE events (
     meta_title VARCHAR(255) NULL,
     meta_description VARCHAR(500) NULL,
     created_at TIMESTAMP NULL,
-    updated_at TIMESTAMP NULL
+    updated_at TIMESTAMP NULL,
+    CONSTRAINT events_author_id_foreign
+        FOREIGN KEY (author_id) REFERENCES users(id)
+        ON DELETE SET NULL
 );
 
 CREATE TABLE gallery_categories (

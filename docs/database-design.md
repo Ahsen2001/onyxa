@@ -13,7 +13,7 @@ Stores authenticated admin users.
 | `email` | VARCHAR(255) | Required | Unique | Login email address. |
 | `email_verified_at` | TIMESTAMP | Nullable |  | Email verification timestamp. |
 | `password` | VARCHAR(255) | Required |  | Hashed Laravel password. |
-| `role` | ENUM('admin','super_admin') | Required |  | Admin access role. |
+| `role` | ENUM('admin','user') | Required |  | User access role. Only `admin` can access admin routes. |
 | `profile_image` | VARCHAR(255) | Nullable |  | Uploaded profile image path. |
 | `phone` | VARCHAR(50) | Nullable |  | Admin phone number. |
 | `status` | ENUM('active','inactive') | Required |  | Controls account access. |
@@ -108,6 +108,7 @@ Stores exhibitions, fairs, workshops, and company events.
 | Column | Data Type | Null | Key | Purpose |
 | --- | --- | --- | --- | --- |
 | `id` | BIGINT UNSIGNED AUTO_INCREMENT | Required | Primary Key | Unique event ID. |
+| `author_id` | BIGINT UNSIGNED | Nullable | Foreign Key | References `users.id`. |
 | `title` | VARCHAR(255) | Required |  | Event title. |
 | `slug` | VARCHAR(255) | Required | Unique | SEO-friendly event URL. |
 | `description` | LONGTEXT | Required |  | Full event description. |
@@ -120,6 +121,8 @@ Stores exhibitions, fairs, workshops, and company events.
 | `meta_description` | VARCHAR(500) | Nullable |  | SEO description. |
 | `created_at` | TIMESTAMP | Nullable |  | Record creation time. |
 | `updated_at` | TIMESTAMP | Nullable |  | Last update time. |
+
+Foreign key: `author_id` references `users.id` with null on delete.
 
 ## 7. `gallery_categories`
 
