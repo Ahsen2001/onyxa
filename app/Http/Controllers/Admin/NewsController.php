@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\NewsRequest;
 use App\Models\News;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -78,6 +79,22 @@ class NewsController extends Controller
         $news->delete();
 
         return redirect()->route('admin.news.index')->with('success', 'News post deleted successfully.');
+    }
+
+    public function updateStatus(Request $request, News $news): RedirectResponse
+    {
+        $data = $request->validate([
+            'status' => ['required', 'in:draft,published'],
+        ]);
+
+        $news->update([
+            'status' => $data['status'],
+            'published_at' => $data['status'] === 'published'
+                ? ($news->published_at ?: now())
+                : $news->published_at,
+        ]);
+
+        return back()->with('success', 'News status updated successfully.');
     }
 
     private function uniqueSlug(string $title, ?int $ignoreId = null): string

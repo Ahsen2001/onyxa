@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductCategoryRequest;
 use App\Models\ProductCategory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -78,6 +79,17 @@ class ProductCategoryController extends Controller
         return redirect()
             ->route('admin.product-categories.index')
             ->with('success', 'Product category deleted successfully.');
+    }
+
+    public function updateStatus(Request $request, ProductCategory $productCategory): RedirectResponse
+    {
+        $data = $request->validate([
+            'status' => ['required', 'in:active,inactive'],
+        ]);
+
+        $productCategory->update(['status' => $data['status']]);
+
+        return back()->with('success', 'Product category status updated successfully.');
     }
 
     private function uniqueSlug(string $name, ?int $ignoreId = null): string

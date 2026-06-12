@@ -45,12 +45,18 @@
                             <td class="px-5 py-4">{{ $product->price ? 'Rs. '.number_format((float) $product->price, 2) : '-' }}</td>
                             <td class="px-5 py-4">{{ ucwords(str_replace('_', ' ', $product->availability)) }}</td>
                             <td class="px-5 py-4">
-                                <span class="rounded-full px-3 py-1 text-xs font-semibold {{ $product->status === 'published' ? 'bg-[#2E7D32]/10 text-[#2E7D32]' : 'bg-gray-100 text-gray-600' }}">
-                                    {{ ucfirst($product->status) }}
-                                </span>
+                                <x-ui.status-badge :status="$product->status" />
                             </td>
                             <td class="px-5 py-4">
-                                <div class="flex justify-end gap-2">
+                                <div class="flex flex-wrap justify-end gap-2">
+                                    <form method="POST" action="{{ route('admin.products.status', $product) }}" onsubmit="return confirm('Change this product status?');">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="{{ $product->status === 'published' ? 'inactive' : 'published' }}">
+                                        <button type="submit" class="rounded-lg border border-[#2E7D32]/20 px-3 py-2 font-medium text-[#2E7D32] hover:bg-[#2E7D32]/10">
+                                            {{ $product->status === 'published' ? 'Inactivate' : 'Publish' }}
+                                        </button>
+                                    </form>
                                     <a href="{{ route('admin.products.show', $product) }}" class="rounded-lg border border-[#DCC9AD] px-3 py-2 font-medium text-[#6F665A] hover:bg-[#FFF8EC]">View</a>
                                     <a href="{{ route('admin.products.edit', $product) }}" class="rounded-lg border border-[#DCC9AD] px-3 py-2 font-medium text-[#8B5E3C] hover:bg-[#FFF8EC]">Edit</a>
                                     <form method="POST" action="{{ route('admin.products.destroy', $product) }}" onsubmit="return confirm('Delete this product and all its images?');">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EventRequest;
 use App\Models\Event;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -75,6 +76,17 @@ class EventController extends Controller
         $event->delete();
 
         return redirect()->route('admin.events.index')->with('success', 'Event deleted successfully.');
+    }
+
+    public function updateStatus(Request $request, Event $event): RedirectResponse
+    {
+        $data = $request->validate([
+            'status' => ['required', 'in:upcoming,completed,cancelled'],
+        ]);
+
+        $event->update(['status' => $data['status']]);
+
+        return back()->with('success', 'Event status updated successfully.');
     }
 
     private function uniqueSlug(string $title, ?int $ignoreId = null): string

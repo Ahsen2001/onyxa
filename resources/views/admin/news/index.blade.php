@@ -10,6 +10,7 @@
     </div>
 
     <div class="overflow-hidden rounded-xl border border-[#E8DCCB] bg-white shadow-sm">
+        <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-[#F0E6D8] text-sm">
             <thead class="bg-[#FFF8EC] text-left text-[#6F665A]">
                 <tr>
@@ -28,10 +29,18 @@
                         </td>
                         <td class="px-5 py-4">{{ $post->published_at?->format('M d, Y') ?? '-' }}</td>
                         <td class="px-5 py-4">
-                            <span class="rounded-full px-3 py-1 text-xs font-semibold {{ $post->status === 'published' ? 'bg-[#2E7D32]/10 text-[#2E7D32]' : 'bg-gray-100 text-gray-600' }}">{{ ucfirst($post->status) }}</span>
+                            <x-ui.status-badge :status="$post->status" />
                         </td>
                         <td class="px-5 py-4">
-                            <div class="flex justify-end gap-2">
+                            <div class="flex flex-wrap justify-end gap-2">
+                                <form method="POST" action="{{ route('admin.news.status', $post) }}" onsubmit="return confirm('Change this news status?');">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="status" value="{{ $post->status === 'published' ? 'draft' : 'published' }}">
+                                    <button type="submit" class="rounded-lg border border-[#2E7D32]/20 px-3 py-2 font-medium text-[#2E7D32] hover:bg-[#2E7D32]/10">
+                                        {{ $post->status === 'published' ? 'Unpublish' : 'Publish' }}
+                                    </button>
+                                </form>
                                 <a href="{{ route('admin.news.show', $post) }}" class="rounded-lg border border-[#DCC9AD] px-3 py-2 font-medium text-[#6F665A] hover:bg-[#FFF8EC]">View</a>
                                 <a href="{{ route('admin.news.edit', $post) }}" class="rounded-lg border border-[#DCC9AD] px-3 py-2 font-medium text-[#8B5E3C] hover:bg-[#FFF8EC]">Edit</a>
                                 <form method="POST" action="{{ route('admin.news.destroy', $post) }}" onsubmit="return confirm('Delete this news post?');">
@@ -47,6 +56,7 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
     </div>
     <div class="mt-5">{{ $news->links() }}</div>
 @endsection

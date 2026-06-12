@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductCategory;
-use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -23,6 +22,13 @@ class ProductFrontendController extends Controller
             ->when($request->filled('search'), function ($query) use ($request): void {
                 $query->where('name', 'like', '%'.(string) $request->string('search').'%');
             })
+            ->when($request->filled('availability'), function ($query) use ($request): void {
+                $availability = (string) $request->string('availability');
+
+                if (in_array($availability, ['available', 'out_of_stock', 'made_to_order'], true)) {
+                    $query->where('availability', $availability);
+                }
+            })
             ->latest()
             ->paginate(9)
             ->withQueryString();
@@ -30,7 +36,6 @@ class ProductFrontendController extends Controller
         return view('frontend.products.index', [
             'categories' => $categories,
             'products' => $products,
-            'whatsappNumber' => $this->whatsappNumber(),
         ]);
     }
 
@@ -52,12 +57,6 @@ class ProductFrontendController extends Controller
         return view('frontend.products.show', [
             'product' => $product,
             'relatedProducts' => $relatedProducts,
-            'whatsappNumber' => $this->whatsappNumber(),
         ]);
-    }
-
-    private function whatsappNumber(): string
-    {
-        return preg_replace('/\D+/', '', Setting::valueFor('whatsapp', Setting::valueFor('phone', '940000000000')));
     }
 }

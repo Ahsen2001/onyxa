@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\GalleryCategoryRequest;
 use App\Models\GalleryCategory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -57,6 +58,17 @@ class GalleryCategoryController extends Controller
         $galleryCategory->delete();
 
         return back()->with('success', 'Gallery category deleted successfully.');
+    }
+
+    public function updateStatus(Request $request, GalleryCategory $galleryCategory): RedirectResponse
+    {
+        $data = $request->validate([
+            'status' => ['required', 'in:active,inactive'],
+        ]);
+
+        $galleryCategory->update(['status' => $data['status']]);
+
+        return back()->with('success', 'Gallery category status updated successfully.');
     }
 
     private function uniqueSlug(string $name, ?int $ignoreId = null): string

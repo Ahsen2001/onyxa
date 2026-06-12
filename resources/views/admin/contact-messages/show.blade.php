@@ -9,13 +9,19 @@
             <a href="{{ route('admin.contact-messages.index') }}" class="rounded-lg border border-[#DCC9AD] px-4 py-2 text-sm font-semibold text-[#8B5E3C]">Back to messages</a>
 
             <div class="flex flex-wrap gap-2">
-                @unless ($contactMessage->is_read)
+                @if (! $contactMessage->is_read)
                     <form method="POST" action="{{ route('admin.contact-messages.read', $contactMessage) }}">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="rounded-lg bg-[#2E7D32] px-4 py-2 text-sm font-semibold text-white">Mark as read</button>
+                        <button type="submit" onclick="return confirm('Mark this message as read?')" class="rounded-lg bg-[#2E7D32] px-4 py-2 text-sm font-semibold text-white">Mark as read</button>
                     </form>
-                @endunless
+                @else
+                    <form method="POST" action="{{ route('admin.contact-messages.unread', $contactMessage) }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" onclick="return confirm('Mark this message as unread?')" class="rounded-lg border border-[#D9A441]/30 px-4 py-2 text-sm font-semibold text-[#8A641E]">Mark as unread</button>
+                    </form>
+                @endif
 
                 <form method="POST" action="{{ route('admin.contact-messages.destroy', $contactMessage) }}" onsubmit="return confirm('Delete this message?')">
                     @csrf

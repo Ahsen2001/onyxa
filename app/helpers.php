@@ -22,3 +22,14 @@ if (! function_exists('page_section')) {
         return $page?->{$field} ?: $default;
     }
 }
+
+if (! function_exists('whatsapp_url')) {
+    function whatsapp_url(?string $message = null, ?string $number = null): string
+    {
+        $number = $number ?: setting('whatsapp', setting('phone', ''));
+        $number = preg_replace('/\D+/', '', (string) $number);
+        $message = $message ?: 'Hello ONYXA Private Limited, I would like to know more about your coconut shell handicrafts.';
+
+        return 'https://wa.me/'.$number.'?text='.rawurlencode($message);
+    }
+}

@@ -49,19 +49,26 @@ Route::middleware(['auth', 'admin'])
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('products', ProductController::class);
+        Route::patch('/products/{product}/status', [ProductController::class, 'updateStatus'])->name('products.status');
         Route::delete('/product-images/{productImage}', [ProductController::class, 'destroyImage'])->name('product-images.destroy');
         Route::resource('product-categories', ProductCategoryController::class)
             ->parameters(['product-categories' => 'productCategory'])
             ->except(['show']);
+        Route::patch('/product-categories/{productCategory}/status', [ProductCategoryController::class, 'updateStatus'])->name('product-categories.status');
         Route::resource('news', NewsController::class);
+        Route::patch('/news/{news}/status', [NewsController::class, 'updateStatus'])->name('news.status');
         Route::resource('events', EventController::class);
+        Route::patch('/events/{event}/status', [EventController::class, 'updateStatus'])->name('events.status');
         Route::resource('gallery-categories', GalleryCategoryController::class)
             ->parameters(['gallery-categories' => 'galleryCategory'])
             ->except(['show']);
+        Route::patch('/gallery-categories/{galleryCategory}/status', [GalleryCategoryController::class, 'updateStatus'])->name('gallery-categories.status');
         Route::resource('galleries', GalleryController::class)->except(['show']);
+        Route::patch('/galleries/{gallery}/status', [GalleryController::class, 'updateStatus'])->name('galleries.status');
         Route::get('/contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
         Route::get('/contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
         Route::patch('/contact-messages/{contactMessage}/read', [ContactMessageController::class, 'markRead'])->name('contact-messages.read');
+        Route::patch('/contact-messages/{contactMessage}/unread', [ContactMessageController::class, 'markUnread'])->name('contact-messages.unread');
         Route::delete('/contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
         Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
         Route::get('/pages/{page}/edit', [PageController::class, 'edit'])->name('pages.edit');

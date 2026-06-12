@@ -108,6 +108,17 @@ class ProductController extends Controller
         return back()->with('success', 'Product image deleted successfully.');
     }
 
+    public function updateStatus(Request $request, Product $product): RedirectResponse
+    {
+        $data = $request->validate([
+            'status' => ['required', 'in:published,inactive,draft'],
+        ]);
+
+        $product->update(['status' => $data['status']]);
+
+        return back()->with('success', 'Product status updated successfully.');
+    }
+
     private function storeAdditionalImages(Request $request, Product $product): void
     {
         if (! $request->hasFile('additional_images')) {

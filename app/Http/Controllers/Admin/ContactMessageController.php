@@ -55,6 +55,13 @@ class ContactMessageController extends Controller
         return back()->with('success', 'Message marked as read.');
     }
 
+    public function markUnread(ContactMessage $contactMessage): RedirectResponse
+    {
+        $contactMessage->update(['is_read' => false]);
+
+        return back()->with('success', 'Message marked as unread.');
+    }
+
     public function destroy(ContactMessage $contactMessage): RedirectResponse
     {
         $contactMessage->delete();

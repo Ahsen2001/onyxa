@@ -40,10 +40,18 @@
                             <td class="px-5 py-4 text-[#6F665A]">{{ $category->slug }}</td>
                             <td class="px-5 py-4">{{ $category->products_count }}</td>
                             <td class="px-5 py-4">
-                                <span class="rounded-full px-3 py-1 text-xs font-semibold {{ $category->status === 'active' ? 'bg-[#2E7D32]/10 text-[#2E7D32]' : 'bg-gray-100 text-gray-600' }}">{{ ucfirst($category->status) }}</span>
+                                <x-ui.status-badge :status="$category->status" />
                             </td>
                             <td class="px-5 py-4">
-                                <div class="flex justify-end gap-2">
+                                <div class="flex flex-wrap justify-end gap-2">
+                                    <form method="POST" action="{{ route('admin.product-categories.status', $category) }}" onsubmit="return confirm('Change this category status?');">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="{{ $category->status === 'active' ? 'inactive' : 'active' }}">
+                                        <button type="submit" class="rounded-lg border border-[#2E7D32]/20 px-3 py-2 font-medium text-[#2E7D32] hover:bg-[#2E7D32]/10">
+                                            {{ $category->status === 'active' ? 'Inactivate' : 'Activate' }}
+                                        </button>
+                                    </form>
                                     <a href="{{ route('admin.product-categories.edit', $category) }}" class="rounded-lg border border-[#DCC9AD] px-3 py-2 font-medium text-[#8B5E3C] hover:bg-[#FFF8EC]">Edit</a>
                                     <form method="POST" action="{{ route('admin.product-categories.destroy', $category) }}" onsubmit="return confirm('Delete this category?');">
                                         @csrf

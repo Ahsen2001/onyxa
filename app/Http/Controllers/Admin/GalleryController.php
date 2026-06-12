@@ -73,4 +73,15 @@ class GalleryController extends Controller
         return back()->with('success', 'Gallery image deleted successfully.');
     }
 
+    public function updateStatus(Request $request, Gallery $gallery): RedirectResponse
+    {
+        $data = $request->validate([
+            'status' => ['required', 'in:active,inactive'],
+        ]);
+
+        $gallery->update(['status' => $data['status']]);
+
+        return back()->with('success', 'Gallery image status updated successfully.');
+    }
+
 }

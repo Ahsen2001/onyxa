@@ -13,14 +13,14 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <a href="{{ route('products.index') }}" class="text-sm font-semibold text-[#8B5E3C]">Back to products</a>
 
-            <div class="mt-6 grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+            <div class="mt-6 grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10">
                 <div>
                     <div class="aspect-square overflow-hidden rounded-2xl border border-[#E8DCCB] bg-[#EAD7BD]">
                         @if ($product->main_image)
                             <img src="{{ asset('storage/'.$product->main_image) }}" alt="{{ $product->name }}" class="h-full w-full object-cover">
                         @endif
                     </div>
-                    <div class="mt-4 grid grid-cols-4 gap-3">
+                    <div class="mt-4 grid grid-cols-4 gap-2 sm:gap-3">
                         @foreach ($product->images as $image)
                             <img src="{{ asset('storage/'.$image->image) }}" alt="{{ $image->alt_text ?: $product->name.' detail image' }}" class="aspect-square rounded-lg object-cover">
                         @endforeach
@@ -29,8 +29,8 @@
 
                 <div>
                     <p class="text-sm font-semibold uppercase tracking-[0.18em] text-[#2E7D32]">{{ $product->category?->name }}</p>
-                    <h1 class="mt-3 text-4xl font-semibold">{{ $product->name }}</h1>
-                    <p class="mt-4 text-lg leading-8 text-[#5F584F]">{{ $product->short_description }}</p>
+                    <h1 class="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">{{ $product->name }}</h1>
+                    <p class="mt-4 text-base leading-7 text-[#5F584F] sm:text-lg sm:leading-8">{{ $product->short_description }}</p>
 
                     <dl class="mt-8 grid gap-4 sm:grid-cols-2">
                         <div class="rounded-xl border border-[#E8DCCB] bg-white p-4"><dt class="text-sm text-[#6F665A]">Material</dt><dd class="mt-1 font-semibold">{{ $product->material ?? '-' }}</dd></div>
@@ -44,9 +44,9 @@
                         <p class="mt-3 whitespace-pre-line leading-8 text-[#5F584F]">{{ $product->description }}</p>
                     </div>
 
-                    <div class="mt-8 flex flex-wrap gap-3">
-                        <a href="https://wa.me/{{ $whatsappNumber }}?text={{ urlencode('I am interested in '.$product->name) }}" target="_blank" class="rounded-lg bg-[#2E7D32] px-5 py-3 text-sm font-semibold text-white hover:bg-[#256528]">WhatsApp Inquiry</a>
-                        <a href="{{ route('contact') }}" class="rounded-lg border border-[#8B5E3C] px-5 py-3 text-sm font-semibold text-[#8B5E3C] hover:bg-[#8B5E3C] hover:text-white">Contact Inquiry</a>
+                    <div class="mt-8 grid gap-3 sm:flex sm:flex-wrap">
+                        <a href="{{ whatsapp_url('Hello ONYXA Private Limited, I am interested in '.$product->name.'. Please send me more details.') }}" target="_blank" rel="noopener" class="rounded-lg bg-[#2E7D32] px-5 py-3 text-center text-sm font-semibold text-white hover:bg-[#256528]">WhatsApp Inquiry</a>
+                        <a href="{{ route('contact') }}" class="rounded-lg border border-[#8B5E3C] px-5 py-3 text-center text-sm font-semibold text-[#8B5E3C] hover:bg-[#8B5E3C] hover:text-white">Contact Inquiry</a>
                     </div>
                 </div>
             </div>

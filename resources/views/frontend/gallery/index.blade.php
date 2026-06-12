@@ -1,14 +1,15 @@
 @extends('layouts.app')
 
 @section('title', 'Gallery - ONYXA Private Limited')
+@section('meta_description', 'Browse ONYXA coconut shell handicraft gallery images by category.')
 
 @section('content')
     <section class="bg-[#FFF8EC] py-16">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <p class="text-sm font-semibold uppercase tracking-[0.18em] text-[#2E7D32]">Gallery</p>
-            <h1 class="mt-3 text-4xl font-semibold">Our coconut shell craft moments</h1>
+            <h1 class="mt-3 text-3xl font-semibold leading-tight sm:text-4xl">Our coconut shell craft moments</h1>
 
-            <div class="mt-8 flex flex-wrap gap-2">
+            <div class="mt-8 flex flex-wrap gap-2 rounded-xl border border-[#E8DCCB] bg-white p-3">
                 <a href="{{ route('gallery.index') }}" class="rounded-full px-4 py-2 text-sm font-semibold {{ request('category') ? 'bg-white text-[#8B5E3C]' : 'bg-[#8B5E3C] text-white' }}">All</a>
                 @foreach ($categories as $category)
                     <a href="{{ route('gallery.index', ['category' => $category->slug]) }}" class="rounded-full px-4 py-2 text-sm font-semibold {{ request('category') === $category->slug ? 'bg-[#8B5E3C] text-white' : 'bg-white text-[#8B5E3C]' }}">{{ $category->name }}</a>
@@ -17,7 +18,7 @@
 
             <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 @forelse ($images as $image)
-                    <button type="button" class="group overflow-hidden rounded-xl border border-[#E8DCCB] bg-white text-left shadow-sm" onclick="openLightbox('{{ asset('storage/'.$image->image) }}', '{{ addslashes($image->title ?? 'ONYXA gallery image') }}')">
+                    <button type="button" class="group overflow-hidden rounded-xl border border-[#E8DCCB] bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-soft" data-image="{{ asset('storage/'.$image->image) }}" data-title="{{ $image->title ?? 'ONYXA gallery image' }}" onclick="openLightbox(this.dataset.image, this.dataset.title)">
                         <div class="aspect-[4/3] overflow-hidden bg-[#EAD7BD]">
                             <img src="{{ asset('storage/'.$image->image) }}" alt="{{ $image->title }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
                         </div>
@@ -27,7 +28,7 @@
                         </div>
                     </button>
                 @empty
-                    <p class="text-[#6F665A]">No gallery images yet.</p>
+                    <div class="rounded-xl border border-[#E8DCCB] bg-white p-8 text-center text-[#6F665A] sm:col-span-2 lg:col-span-3">No gallery images found.</div>
                 @endforelse
             </div>
 
