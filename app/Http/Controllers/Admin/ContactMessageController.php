@@ -32,8 +32,8 @@ class ContactMessageController extends Controller
 
         $counts = [
             'all' => ContactMessage::count(),
-            'unread' => ContactMessage::unread()->count(),
-            'read' => ContactMessage::read()->count(),
+            'unread' => ContactMessage::where('is_read', false)->count(),
+            'read' => ContactMessage::where('is_read', true)->count(),
         ];
 
         return view('admin.contact-messages.index', compact('messages', 'counts', 'status', 'search'));

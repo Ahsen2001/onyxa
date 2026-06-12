@@ -86,7 +86,7 @@ The admin controllers delete old files when replacing images and delete stored f
 
 ```blade
 @php($logo = setting('logo'))
-<img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.jpg') }}" alt="ONYXA logo">
+<img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.png') }}" alt="ONYXA logo">
 ```
 
 ## FormRequest Validation Examples

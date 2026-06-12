@@ -3,7 +3,7 @@
         <div>
             <div class="flex items-center gap-3">
                 @php($logo = setting('logo'))
-                <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.jpg') }}" alt="ONYXA logo" class="h-12 w-12 rounded-full object-cover ring-2 ring-[#D9A441]">
+                <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.png') }}" alt="ONYXA logo" class="h-12 w-12 rounded-full object-cover ring-2 ring-[#D9A441]">
                 <div>
                     <p class="font-semibold">{{ setting('company_name', 'ONYXA Private Limited') }}</p>
                     <p class="text-xs uppercase tracking-[0.18em] text-[#D9A441]">{{ setting('tagline', 'Natural Handicrafts') }}</p>

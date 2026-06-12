@@ -12,7 +12,7 @@
     <main class="grid min-h-screen place-items-center px-4 py-10">
         <section class="w-full max-w-5xl overflow-hidden rounded-2xl border border-[#E8DCCB] bg-white shadow-soft md:grid md:grid-cols-[0.9fr_1.1fr]">
             <div class="bg-[#2B2B2B] p-8 text-white md:p-10">
-                <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.jpg') }}" alt="ONYXA logo" class="h-16 w-16 rounded-full object-cover ring-2 ring-[#D9A441]">
+                <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.png') }}" alt="ONYXA logo" class="h-16 w-16 rounded-full object-cover ring-2 ring-[#D9A441]">
                 <p class="mt-8 text-sm font-semibold uppercase tracking-[0.18em] text-[#D9A441]">Admin access</p>
                 <h1 class="mt-3 text-3xl font-semibold leading-tight">ONYXA content management</h1>
                 <p class="mt-4 text-sm leading-7 text-white/70">

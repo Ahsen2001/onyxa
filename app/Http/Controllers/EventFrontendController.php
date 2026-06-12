@@ -15,7 +15,7 @@ class EventFrontendController extends Controller
         if (in_array($status, ['upcoming', 'completed'], true)) {
             $events = Event::query()
                 ->where('status', $status)
-                ->when($status === 'upcoming', fn ($query) => $query->whereDate('event_date', '>=', now()->toDateString())->orderBy('event_date'))
+                ->when($status === 'upcoming', fn ($query) => $query->whereDate('event_date', '>=', now()->toDateString())->orderBy('event_date', 'asc'))
                 ->when($status === 'completed', fn ($query) => $query->latest('event_date'))
                 ->paginate(9)
                 ->withQueryString();
@@ -25,7 +25,7 @@ class EventFrontendController extends Controller
 
         $upcomingEvents = Event::query()
             ->upcoming()
-            ->orderBy('event_date')
+            ->orderBy('event_date', 'asc')
             ->paginate(6, ['*'], 'upcoming_page')
             ->withQueryString();
 
@@ -45,7 +45,7 @@ class EventFrontendController extends Controller
         $relatedEvents = Event::query()
             ->whereKeyNot($event->id)
             ->where('status', $event->status)
-            ->orderBy('event_date')
+            ->orderBy('event_date', 'asc')
             ->take(3)
             ->get();
 
