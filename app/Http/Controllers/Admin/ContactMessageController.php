@@ -31,9 +31,9 @@ class ContactMessageController extends Controller
             ->withQueryString();
 
         $counts = [
-            'all' => ContactMessage::count(),
-            'unread' => ContactMessage::where('is_read', false)->count(),
-            'read' => ContactMessage::where('is_read', true)->count(),
+            'all' => ContactMessage::query()->count('*'),
+            'unread' => ContactMessage::query()->where('is_read', false)->count('*'),
+            'read' => ContactMessage::query()->where('is_read', true)->count('*'),
         ];
 
         return view('admin.contact-messages.index', compact('messages', 'counts', 'status', 'search'));
@@ -64,7 +64,7 @@ class ContactMessageController extends Controller
 
     public function destroy(ContactMessage $contactMessage): RedirectResponse
     {
-        $contactMessage->delete();
+        ContactMessage::destroy($contactMessage->getKey());
 
         return redirect()->route('admin.contact-messages.index')->with('success', 'Message deleted successfully.');
     }
