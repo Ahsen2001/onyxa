@@ -73,7 +73,7 @@ class EventController extends Controller
     public function destroy(Event $event): RedirectResponse
     {
         $this->deleteImage($event->featured_image);
-        $event->delete();
+        Event::destroy($event->getKey());
 
         return redirect()->route('admin.events.index')->with('success', 'Event deleted successfully.');
     }
@@ -95,7 +95,7 @@ class EventController extends Controller
         $slug = $baseSlug;
         $counter = 2;
 
-        while (Event::where('slug', $slug)->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))->exists()) {
+        while (Event::query()->where('slug', '=', $slug)->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))->exists()) {
             $slug = "{$baseSlug}-{$counter}";
             $counter++;
         }

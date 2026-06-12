@@ -55,7 +55,7 @@ class GalleryCategoryController extends Controller
             return back()->with('error', 'This category has gallery images and cannot be deleted.');
         }
 
-        $galleryCategory->delete();
+        GalleryCategory::destroy($galleryCategory->getKey());
 
         return back()->with('success', 'Gallery category deleted successfully.');
     }
@@ -77,7 +77,7 @@ class GalleryCategoryController extends Controller
         $slug = $baseSlug;
         $counter = 2;
 
-        while (GalleryCategory::where('slug', $slug)->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))->exists()) {
+        while (GalleryCategory::query()->where('slug', '=', $slug)->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))->exists()) {
             $slug = "{$baseSlug}-{$counter}";
             $counter++;
         }

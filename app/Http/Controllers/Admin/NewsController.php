@@ -76,7 +76,7 @@ class NewsController extends Controller
     public function destroy(News $news): RedirectResponse
     {
         $this->deleteImage($news->featured_image);
-        $news->delete();
+        News::destroy($news->getKey());
 
         return redirect()->route('admin.news.index')->with('success', 'News post deleted successfully.');
     }
@@ -103,7 +103,7 @@ class NewsController extends Controller
         $slug = $baseSlug;
         $counter = 2;
 
-        while (News::where('slug', $slug)->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))->exists()) {
+        while (News::query()->where('slug', '=', $slug)->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))->exists()) {
             $slug = "{$baseSlug}-{$counter}";
             $counter++;
         }

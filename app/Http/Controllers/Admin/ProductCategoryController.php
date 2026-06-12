@@ -74,7 +74,7 @@ class ProductCategoryController extends Controller
         }
 
         $this->deleteImage($productCategory->image);
-        $productCategory->delete();
+        ProductCategory::destroy($productCategory->getKey());
 
         return redirect()
             ->route('admin.product-categories.index')
@@ -98,7 +98,7 @@ class ProductCategoryController extends Controller
         $slug = $baseSlug;
         $counter = 2;
 
-        while (ProductCategory::where('slug', $slug)
+        while (ProductCategory::query()->where('slug', '=', $slug)
             ->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))
             ->exists()) {
             $slug = "{$baseSlug}-{$counter}";

@@ -68,7 +68,7 @@ class GalleryController extends Controller
     public function destroy(Gallery $gallery): RedirectResponse
     {
         Storage::disk('public')->delete($gallery->image);
-        $gallery->delete();
+        Gallery::destroy($gallery->getKey());
 
         return back()->with('success', 'Gallery image deleted successfully.');
     }

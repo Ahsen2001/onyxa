@@ -93,7 +93,7 @@ class ProductController extends Controller
             $this->deleteImage($image->image);
         }
 
-        $product->delete();
+        Product::destroy($product->getKey());
 
         return redirect()
             ->route('admin.products.index')
@@ -103,7 +103,7 @@ class ProductController extends Controller
     public function destroyImage(ProductImage $productImage): RedirectResponse
     {
         $this->deleteImage($productImage->image);
-        $productImage->delete();
+        ProductImage::destroy($productImage->getKey());
 
         return back()->with('success', 'Product image deleted successfully.');
     }
@@ -144,7 +144,7 @@ class ProductController extends Controller
         $slug = $baseSlug;
         $counter = 2;
 
-        while (Product::where('slug', $slug)
+        while (Product::query()->where('slug', '=', $slug)
             ->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))
             ->exists()) {
             $slug = "{$baseSlug}-{$counter}";
