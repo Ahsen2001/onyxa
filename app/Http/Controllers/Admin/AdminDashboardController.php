@@ -29,7 +29,7 @@ class AdminDashboardController extends Controller
                 ->get(),
             'upcomingEvents' => Event::query()
                 ->upcoming()
-                ->orderBy('event_date')
+                ->orderBy('event_date', 'asc')
                 ->take(5)
                 ->get(),
             'recentMessages' => ContactMessage::query()

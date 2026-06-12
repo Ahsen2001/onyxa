@@ -15,7 +15,10 @@ class PageController extends Controller
     public function index(): View
     {
         $this->ensureDefaultSections();
-        $pages = Page::orderBy('page_key')->orderBy('section_key')->get();
+        $pages = Page::query()
+            ->orderBy('page_key', 'asc')
+            ->orderBy('section_key', 'asc')
+            ->get();
 
         return view('admin.pages.index', compact('pages'));
     }

@@ -26,6 +26,6 @@ class ProductImage extends Model
 
     public function scopeOrdered(Builder $query): Builder
     {
-        return $query->orderBy('sort_order')->orderBy('id');
+        return $query->orderBy('sort_order', 'asc')->orderBy('id', 'asc');
     }
 }

@@ -26,7 +26,7 @@ class HomeController extends Controller
                 ->get(),
             'upcomingEvents' => Event::query()
                 ->upcoming()
-                ->orderBy('event_date')
+                ->orderBy('event_date', 'asc')
                 ->take(3)
                 ->get(),
             'galleryImages' => Gallery::query()

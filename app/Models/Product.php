@@ -39,7 +39,7 @@ class Product extends Model
 
     public function images(): HasMany
     {
-        return $this->hasMany(ProductImage::class)->orderBy('sort_order');
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order', 'asc');
     }
 
     public function scopePublished(Builder $query): Builder

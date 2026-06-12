@@ -17,7 +17,7 @@ class EventController extends Controller
     {
         $events = Event::with('user')
             ->orderByRaw("FIELD(status, 'upcoming', 'completed', 'cancelled')")
-            ->orderBy('event_date')
+            ->orderBy('event_date', 'asc')
             ->paginate(10);
 
         return view('admin.events.index', compact('events'));
