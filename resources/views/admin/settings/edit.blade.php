@@ -12,5 +12,9 @@
         <div class="md:col-span-2"><label class="mb-2 block text-sm font-semibold">Google Map Embed</label><textarea name="google_map_embed" rows="4" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3">{{ old('google_map_embed', setting('google_map_embed')) }}</textarea></div>
         <div class="md:col-span-2"><label class="mb-2 block text-sm font-semibold">Footer Text</label><textarea name="footer_text" rows="4" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3">{{ old('footer_text', setting('footer_text')) }}</textarea></div>
     </div><div class="mt-6"><button class="rounded-lg bg-[#8B5E3C] px-5 py-3 text-sm font-semibold text-white">Save Settings</button></div></form>
-    <div class="mt-6 rounded-xl border border-[#E8DCCB] bg-[#FFF8EC] p-5 text-sm text-[#6F665A]"><p class="font-semibold text-[#2B2B2B]">Blade helper examples</p><p class="mt-2"><code>{{ '{{ setting("company_name", "ONYXA Private Limited") }}' }}</code></p><p><code>{{ '{{ setting("phone") }}' }}</code></p></div>
+    <div class="mt-6 rounded-xl border border-[#E8DCCB] bg-[#FFF8EC] p-5 text-sm text-[#6F665A]">
+        <p class="font-semibold text-[#2B2B2B]">Blade helper examples</p>
+        <p class="mt-2"><code>@verbatim{{ setting("company_name", "ONYXA Private Limited") }}@endverbatim</code></p>
+        <p><code>@verbatim{{ setting("phone") }}@endverbatim</code></p>
+    </div>
 @endsection

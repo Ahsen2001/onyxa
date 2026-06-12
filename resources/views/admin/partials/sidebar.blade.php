@@ -27,7 +27,7 @@
         <button id="admin-sidebar-close" type="button" class="rounded-lg border border-white/15 px-3 py-2 text-sm text-white/75 lg:hidden">Close</button>
     </div>
 
-    <nav class="mt-7 grid gap-1 overflow-y-auto pr-1 text-sm">
+    <nav class="mt-7 grid gap-1 pr-1 text-sm">
         @foreach ($menu as $item)
             <a href="{{ route($item['route']) }}"
                class="rounded-xl px-4 py-3 font-medium transition {{ request()->routeIs($item['active']) ? 'bg-[#8B5E3C] text-white shadow-lg shadow-black/10' : 'text-white/75 hover:bg-white/10 hover:text-white' }}">

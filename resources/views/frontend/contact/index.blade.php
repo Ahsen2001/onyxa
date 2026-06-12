@@ -3,6 +3,11 @@
 @section('title', 'Contact Us - ONYXA Private Limited')
 
 @section('content')
+    @php
+        $defaultMapEmbed = '<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d6685.892296011982!2d81.50099093143679!3d7.9442799766397085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2slk!4v1781241808012!5m2!1sen!2slk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="h-72 w-full rounded-lg"></iframe>';
+        $mapEmbed = setting('google_map_embed', $defaultMapEmbed) ?: $defaultMapEmbed;
+    @endphp
+
     <section class="bg-[#FFF8EC] py-16">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <p class="text-sm font-semibold uppercase tracking-[0.18em] text-[#2E7D32]">Contact</p>
@@ -42,11 +47,7 @@
             </div>
 
             <div class="mt-8 overflow-hidden rounded-xl border border-[#E8DCCB] bg-white p-4">
-                @if (setting('google_map_embed'))
-                    {!! setting('google_map_embed') !!}
-                @else
-                    <div class="flex h-72 items-center justify-center rounded-lg bg-[#EAD7BD] text-[#8B5E3C]">Google map section</div>
-                @endif
+                {!! $mapEmbed !!}
             </div>
         </div>
     </section>
