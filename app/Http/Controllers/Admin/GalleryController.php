@@ -16,9 +16,11 @@ class GalleryController extends Controller
     public function index(Request $request): View
     {
         $categories = GalleryCategory::ordered()->get();
-        $galleries = Gallery::with('category')
-            ->when($request->filled('category'), fn ($query) => $query->where('gallery_category_id', $request->integer('category')))
-            ->latest()
+        $galleries = Gallery::query()
+            ->with('category')
+            ->when($request->filled('category'), fn ($query) => $query->where('gallery_category_id', '=', $request->integer('category'), 'and'))
+            ->latest('updated_at')
+            ->latest('created_at')
             ->paginate(12)
             ->withQueryString();
 

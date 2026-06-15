@@ -140,8 +140,9 @@
             </div>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @forelse ($galleryImages as $image)
+                    @php($imageUrl = asset('storage/'.$image->image).'?v='.($image->updated_at?->timestamp ?? time()))
                     <div class="aspect-[4/3] overflow-hidden rounded-xl bg-[#EAD7BD]">
-                        <img src="{{ asset('storage/'.$image->image) }}" alt="{{ $image->alt_text ?? $image->title ?? 'ONYXA gallery image' }}" class="h-full w-full object-cover">
+                        <img src="{{ $imageUrl }}" alt="{{ $image->alt_text ?? $image->title ?? 'ONYXA gallery image' }}" class="h-full w-full object-cover">
                     </div>
                 @empty
                     @foreach (range(1, 6) as $item)

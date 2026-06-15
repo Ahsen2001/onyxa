@@ -31,7 +31,8 @@ class HomeController extends Controller
                 ->get(),
             'galleryImages' => Gallery::query()
                 ->active()
-                ->ordered()
+                ->latest('updated_at')
+                ->latest('created_at')
                 ->take(6)
                 ->get(),
         ]);

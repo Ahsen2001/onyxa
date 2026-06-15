@@ -1,3 +1,5 @@
+@php($companyName = setting('company_name', 'ONYXA Private Limited'))
+
 <header class="sticky top-0 z-20 border-b border-[#E8DCCB] bg-white/90 px-5 py-4 backdrop-blur md:px-8">
     <div class="flex items-center justify-between gap-4">
         <div class="flex min-w-0 items-center gap-3">
@@ -5,7 +7,7 @@
                 Menu
             </button>
             <div class="min-w-0">
-                <p class="text-sm font-medium text-[#8B5E3C]">ONYXA Private Limited</p>
+                <p class="truncate text-sm font-medium text-[#8B5E3C]">{{ $companyName }}</p>
                 <h1 class="truncate text-2xl font-semibold tracking-tight">@yield('page-title', 'Dashboard')</h1>
             </div>
         </div>

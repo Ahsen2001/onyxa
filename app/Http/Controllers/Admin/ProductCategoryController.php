@@ -98,7 +98,7 @@ class ProductCategoryController extends Controller
         $slug = $baseSlug;
         $counter = 2;
 
-        while (ProductCategory::query()->where('slug', '=', $slug)
+        while (ProductCategory::query()->where('slug', '=', $slug, 'and')
             ->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))
             ->exists()) {
             $slug = "{$baseSlug}-{$counter}";

@@ -17,9 +17,10 @@ class GalleryFrontendController extends Controller
             ->with('category')
             ->active()
             ->when($request->filled('category'), function ($query) use ($request): void {
-                $query->whereHas('category', fn ($categoryQuery) => $categoryQuery->where('slug', (string) $request->string('category')));
+                $query->whereHas('category', fn ($categoryQuery) => $categoryQuery->where('slug', '=', (string) $request->string('category'), 'and'));
             })
-            ->ordered()
+            ->latest('updated_at')
+            ->latest('created_at')
             ->paginate(12)
             ->withQueryString();
 

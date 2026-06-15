@@ -77,7 +77,7 @@ class GalleryCategoryController extends Controller
         $slug = $baseSlug;
         $counter = 2;
 
-        while (GalleryCategory::query()->where('slug', '=', $slug)->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))->exists()) {
+        while (GalleryCategory::query()->where('slug', '=', $slug, 'and')->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))->exists()) {
             $slug = "{$baseSlug}-{$counter}";
             $counter++;
         }

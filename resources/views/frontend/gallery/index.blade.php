@@ -18,9 +18,10 @@
 
             <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 @forelse ($images as $image)
-                    <button type="button" class="group overflow-hidden rounded-xl border border-[#E8DCCB] bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-soft" data-image="{{ asset('storage/'.$image->image) }}" data-title="{{ $image->title ?? 'ONYXA gallery image' }}" onclick="openLightbox(this.dataset.image, this.dataset.title)">
+                    @php($imageUrl = asset('storage/'.$image->image).'?v='.($image->updated_at?->timestamp ?? time()))
+                    <button type="button" class="group overflow-hidden rounded-xl border border-[#E8DCCB] bg-white text-left shadow-sm transition hover:-translate-y-1 hover:shadow-soft" data-image="{{ $imageUrl }}" data-title="{{ $image->title ?? 'ONYXA gallery image' }}" onclick="openLightbox(this.dataset.image, this.dataset.title)">
                         <div class="aspect-[4/3] overflow-hidden bg-[#EAD7BD]">
-                            <img src="{{ asset('storage/'.$image->image) }}" alt="{{ $image->title }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
+                            <img src="{{ $imageUrl }}" alt="{{ $image->alt_text ?? $image->title ?? 'ONYXA gallery image' }}" class="h-full w-full object-cover transition duration-300 group-hover:scale-105">
                         </div>
                         <div class="p-4">
                             <p class="font-semibold">{{ $image->title ?? 'Gallery Image' }}</p>

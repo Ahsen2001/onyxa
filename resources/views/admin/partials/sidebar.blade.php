@@ -1,5 +1,7 @@
 @php
     $logo = setting('logo');
+    $companyName = setting('company_name', 'ONYXA Private Limited');
+    $tagline = setting('tagline', 'Admin Panel');
     $menu = [
         ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'active' => 'admin.dashboard'],
         ['label' => 'Products', 'route' => 'admin.products.index', 'active' => 'admin.products.*'],
@@ -18,10 +20,10 @@
 <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-40 flex w-72 -translate-x-full flex-col bg-[#2B2B2B] px-4 py-5 text-white shadow-2xl transition-transform duration-200 lg:translate-x-0">
     <div class="flex items-center justify-between gap-3 px-2">
         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-            <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.png') }}" alt="ONYXA logo" class="h-12 w-12 rounded-full object-cover ring-2 ring-[#D9A441]">
+            <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.png') }}" alt="{{ $companyName }} logo" class="h-12 w-12 rounded-full object-cover ring-2 ring-[#D9A441]">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#D9A441]">ONYXA</p>
-                <p class="font-semibold">Admin Panel</p>
+                <p class="max-w-44 truncate text-xs font-semibold uppercase tracking-[0.18em] text-[#D9A441]">{{ $companyName }}</p>
+                <p class="max-w-44 truncate font-semibold">{{ $tagline }}</p>
             </div>
         </a>
         <button id="admin-sidebar-close" type="button" class="rounded-lg border border-white/15 px-3 py-2 text-sm text-white/75 lg:hidden">Close</button>

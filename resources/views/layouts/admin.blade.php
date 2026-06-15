@@ -1,11 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
+    @php
+        $adminCompanyName = setting('company_name', 'ONYXA Private Limited');
+        $adminFavicon = setting('favicon');
+    @endphp
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Admin Dashboard') - ONYXA</title>
-    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
+    <title>@yield('title', 'Admin Dashboard') - {{ $adminCompanyName }}</title>
+    <link rel="icon" type="image/png" href="{{ $adminFavicon ? asset('storage/'.$adminFavicon) : asset('logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ $adminFavicon ? asset('storage/'.$adminFavicon) : asset('logo.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#F7F3EA] text-[#2B2B2B] antialiased">

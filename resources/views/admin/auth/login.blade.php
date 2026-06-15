@@ -1,24 +1,28 @@
 <!doctype html>
 <html lang="en">
 <head>
+    @php
+        $companyName = setting('company_name', 'ONYXA Private Limited');
+        $tagline = setting('tagline', 'Crafting Nature into Timeless Art');
+        $logo = setting('logo');
+        $favicon = setting('favicon');
+    @endphp
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login - ONYXA Private Limited</title>
-    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
+    <title>Admin Login - {{ $companyName }}</title>
+    <link rel="icon" type="image/png" href="{{ $favicon ? asset('storage/'.$favicon) : asset('logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ $favicon ? asset('storage/'.$favicon) : asset('logo.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-[#FFF8EC] text-[#2B2B2B] antialiased">
-    @php($logo = setting('logo'))
-
     <main class="grid min-h-screen place-items-center px-4 py-10">
         <section class="w-full max-w-5xl overflow-hidden rounded-2xl border border-[#E8DCCB] bg-white shadow-soft md:grid md:grid-cols-[0.9fr_1.1fr]">
             <div class="bg-[#2B2B2B] p-8 text-white md:p-10">
-                <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.png') }}" alt="ONYXA logo" class="h-16 w-16 rounded-full object-cover ring-2 ring-[#D9A441]">
+                <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.png') }}" alt="{{ $companyName }} logo" class="h-16 w-16 rounded-full object-cover ring-2 ring-[#D9A441]">
                 <p class="mt-8 text-sm font-semibold uppercase tracking-[0.18em] text-[#D9A441]">Admin access</p>
-                <h1 class="mt-3 text-3xl font-semibold leading-tight">ONYXA content management</h1>
+                <h1 class="mt-3 text-3xl font-semibold leading-tight">{{ $companyName }} content management</h1>
                 <p class="mt-4 text-sm leading-7 text-white/70">
-                    Sign in to manage coconut shell handicraft products, news, events, gallery images, messages, and website settings.
+                    {{ $tagline }}. Sign in to manage products, news, events, gallery images, messages, and website settings.
                 </p>
                 <div class="mt-8 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
                     Use your assigned admin account and keep your password private.
