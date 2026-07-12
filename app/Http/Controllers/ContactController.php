@@ -20,8 +20,16 @@ class ContactController extends Controller
 
         unset($data['website']);
         $data['ip_address'] = $request->ip();
+        $data['status'] = 'new';
 
-        ContactMessage::create($data);
+        $contactMessage = ContactMessage::create($data);
+
+        try {
+            $adminEmail = setting('email', 'admin@onyxa.com');
+            \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminContactNotification($contactMessage));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send contact notification email: ' . $e->getMessage());
+        }
 
         return back()->with('success', 'Thank you. Your message has been sent successfully.');
     }

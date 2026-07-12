@@ -81,9 +81,11 @@ Route::middleware(['auth', 'admin'])
         Route::resource('testimonials', TestimonialController::class)->except(['show']);
         Route::patch('/testimonials/{testimonial}/status', [TestimonialController::class, 'updateStatus'])->name('testimonials.status');
         Route::get('/contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
+        Route::get('/contact-messages/export', [ContactMessageController::class, 'export'])->name('contact-messages.export');
         Route::get('/contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
-        Route::patch('/contact-messages/{contactMessage}/read', [ContactMessageController::class, 'markRead'])->name('contact-messages.read');
-        Route::patch('/contact-messages/{contactMessage}/unread', [ContactMessageController::class, 'markUnread'])->name('contact-messages.unread');
+        Route::patch('/contact-messages/{contactMessage}/status', [ContactMessageController::class, 'updateStatus'])->name('contact-messages.status');
+        Route::patch('/contact-messages/{contactMessage}/notes', [ContactMessageController::class, 'updateNotes'])->name('contact-messages.notes');
+        Route::post('/contact-messages/{contactMessage}/reply', [ContactMessageController::class, 'reply'])->name('contact-messages.reply');
         Route::delete('/contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
         Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
         Route::get('/pages/{page}/edit', [PageController::class, 'edit'])->name('pages.edit');
