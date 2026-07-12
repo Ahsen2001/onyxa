@@ -24,11 +24,19 @@ class ContactController extends Controller
 
         $contactMessage = ContactMessage::create($data);
 
+        // Send notification email to admin
         try {
             $adminEmail = setting('email', 'admin@onyxa.com');
             \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminContactNotification($contactMessage));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Failed to send contact notification email: ' . $e->getMessage());
+        }
+
+        // Send confirmation email to user
+        try {
+            \Illuminate\Support\Facades\Mail::to($contactMessage->email)->send(new \App\Mail\UserContactConfirmation($contactMessage));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send contact confirmation email: ' . $e->getMessage());
         }
 
         return back()->with('success', 'Thank you. Your message has been sent successfully.');

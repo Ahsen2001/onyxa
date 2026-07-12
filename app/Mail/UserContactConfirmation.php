@@ -6,10 +6,9 @@ use App\Models\ContactMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class AdminContactNotification extends Mailable implements ShouldQueue
+class UserContactConfirmation extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -22,7 +21,7 @@ class AdminContactNotification extends Mailable implements ShouldQueue
 
     public function build()
     {
-        return $this->subject('New Contact Inquiry: ' . ($this->contactMessage->subject ?: 'General Inquiry'))
-            ->markdown('emails.admin-contact-notification');
+        return $this->subject('We have received your inquiry - ' . setting('company_name', 'ONYXA'))
+            ->markdown('emails.user-contact-confirmation');
     }
 }

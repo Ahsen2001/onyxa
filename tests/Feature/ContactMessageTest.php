@@ -52,7 +52,7 @@ class ContactMessageTest extends TestCase
 
         $message = ContactMessage::first();
 
-        Mail::assertSent(AdminContactNotification::class, function ($mail) use ($message) {
+        Mail::assertQueued(AdminContactNotification::class, function ($mail) use ($message) {
             return $mail->contactMessage->id === $message->id;
         });
     }
@@ -140,7 +140,7 @@ class ContactMessageTest extends TestCase
         $this->assertEquals('replied', $message->status);
         $this->assertNotNull($message->replied_at);
 
-        Mail::assertSent(ContactMessageReply::class, function ($mail) use ($message) {
+        Mail::assertQueued(ContactMessageReply::class, function ($mail) use ($message) {
             return $mail->contactMessage->id === $message->id && 
                    $mail->replySubject === 'Re: Hello' &&
                    $mail->replyMessage === 'Yes, it is available in stock.';

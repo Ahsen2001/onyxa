@@ -16,8 +16,8 @@
             </label>
 
             <div class="absolute left-0 right-0 top-20 hidden border-b border-[#E8DCCB] bg-[#FFF8EC] px-4 py-4 shadow-sm peer-checked:block lg:static lg:block lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none">
-                <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-4">
-                    <div class="flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-1.5">
+                <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-2.5 xl:gap-4">
+                    <div class="flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-1 xl:gap-2">
                         @foreach ([
                         ['label' => 'Home', 'route' => 'home'],
                         ['label' => 'About', 'route' => 'about'],
@@ -30,13 +30,13 @@
                         ['label' => 'Contact', 'route' => 'contact'],
                         ] as $link)
                         <a href="{{ route($link['route']) }}"
-                            class="rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs($link['route']) ? 'bg-[#8B5E3C] text-white' : 'text-[#2B2B2B] hover:bg-[#F0E4D2] hover:text-[#8B5E3C]' }}">
+                            class="rounded-lg px-3 py-2 lg:px-2 lg:py-1.5 lg:text-[13px] xl:px-3 xl:py-2 xl:text-sm font-medium transition {{ request()->routeIs($link['route']) ? 'bg-[#8B5E3C] text-white' : 'text-[#2B2B2B] hover:bg-[#F0E4D2] hover:text-[#8B5E3C]' }}">
                             {{ $link['label'] }}
                         </a>
                         @endforeach
                     </div>
 
-                    <form action="{{ route('search') }}" method="GET" class="relative w-full max-w-xs lg:w-40 xl:w-56 shrink-0">
+                    <form action="{{ route('search') }}" method="GET" class="relative w-full max-w-xs lg:w-32 xl:w-48 transition-all duration-300 focus-within:lg:w-48 focus-within:xl:w-60 shrink-0">
                         <input type="text" name="q" placeholder="Search..." value="{{ request('q') }}" class="w-full rounded-lg border border-[#DCC9AD] bg-[#FFF8EC] py-1.5 pl-3 pr-8 text-sm focus:border-[#8B5E3C] focus:ring-2 focus:ring-[#8B5E3C]/15 focus:outline-none text-[#2B2B2B]">
                         <button type="submit" class="absolute inset-y-0 right-0 flex items-center pr-2.5">
                             <svg class="h-4 w-4 text-[#8B5E3C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
