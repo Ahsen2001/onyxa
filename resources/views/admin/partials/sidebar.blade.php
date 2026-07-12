@@ -11,6 +11,7 @@
         ['label' => 'Gallery', 'route' => 'admin.galleries.index', 'active' => 'admin.galleries.*'],
         ['label' => 'Gallery Categories', 'route' => 'admin.gallery-categories.index', 'active' => 'admin.gallery-categories.*'],
         ['label' => 'Media Library', 'route' => 'admin.media.index', 'active' => 'admin.media.*'],
+        ['label' => 'Clients', 'route' => 'admin.clients.index', 'active' => 'admin.clients.*'],
         ['label' => 'Testimonials', 'route' => 'admin.testimonials.index', 'active' => 'admin.testimonials.*'],
         ['label' => 'Messages', 'route' => 'admin.contact-messages.index', 'active' => 'admin.contact-messages.*'],
         ['label' => 'Pages', 'route' => 'admin.pages.index', 'active' => 'admin.pages.*'],

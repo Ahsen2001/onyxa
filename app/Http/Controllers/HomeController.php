@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Client;
 use App\Models\Gallery;
 use App\Models\News;
 use App\Models\Product;
@@ -35,6 +36,11 @@ class HomeController extends Controller
                 ->latest('updated_at')
                 ->latest('created_at')
                 ->take(6)
+                ->get(),
+            'clients' => Client::query()
+                ->active()
+                ->ordered()
+                ->take(12)
                 ->get(),
             'testimonials' => Testimonial::query()
                 ->active()

@@ -46,6 +46,41 @@
         </div>
     </section>
 
+    @if ($clients->isNotEmpty())
+        <section class="bg-[#F7F1E6] py-14">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+                    <div>
+                        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-[#2E7D32]">Trusted By</p>
+                        <h2 class="mt-3 text-3xl font-semibold">Partners and clients who choose ONYXA</h2>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+                    @foreach ($clients as $client)
+                        @if ($client->website_url)
+                            <a href="{{ $client->website_url }}" target="_blank" rel="noopener" aria-label="{{ $client->company_name }}" class="group flex h-28 items-center justify-center rounded-xl border border-[#E8DCCB] bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#8B5E3C] hover:shadow-lg">
+                                @if ($client->logo)
+                                    <img src="{{ asset('storage/'.$client->logo) }}" alt="{{ $client->company_name }}" class="max-h-16 max-w-full object-contain grayscale transition duration-300 group-hover:scale-105 group-hover:grayscale-0">
+                                @else
+                                    <span class="text-center text-sm font-semibold text-[#6F665A] transition group-hover:text-[#8B5E3C]">{{ $client->company_name }}</span>
+                                @endif
+                            </a>
+                        @else
+                            <div class="group flex h-28 items-center justify-center rounded-xl border border-[#E8DCCB] bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#8B5E3C] hover:shadow-lg">
+                                @if ($client->logo)
+                                    <img src="{{ asset('storage/'.$client->logo) }}" alt="{{ $client->company_name }}" class="max-h-16 max-w-full object-contain grayscale transition duration-300 group-hover:scale-105 group-hover:grayscale-0">
+                                @else
+                                    <span class="text-center text-sm font-semibold text-[#6F665A] transition group-hover:text-[#8B5E3C]">{{ $client->company_name }}</span>
+                                @endif
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
     <section class="bg-[#FFF8EC] py-16">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="mb-8 flex flex-wrap items-end justify-between gap-4">

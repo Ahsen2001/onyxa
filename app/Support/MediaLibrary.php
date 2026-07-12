@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Models\Event;
+use App\Models\Client;
 use App\Models\Media;
 use App\Models\News;
 use App\Models\Page;
@@ -46,6 +47,7 @@ class MediaLibrary
             || News::query()->where('featured_image', $path)->exists()
             || Event::query()->where('featured_image', $path)->exists()
             || Page::query()->where('image', $path)->exists()
+            || Client::query()->where('logo', $path)->exists()
             || Testimonial::query()->where('image', $path)->exists();
     }
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\CkeditorUploadController;
+use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
@@ -74,6 +75,8 @@ Route::middleware(['auth', 'admin'])
         Route::resource('media', MediaController::class)
             ->parameters(['media' => 'media'])
             ->only(['index', 'store', 'destroy']);
+        Route::resource('clients', ClientController::class)->except(['show']);
+        Route::patch('/clients/{client}/status', [ClientController::class, 'updateStatus'])->name('clients.status');
         Route::resource('testimonials', TestimonialController::class)->except(['show']);
         Route::patch('/testimonials/{testimonial}/status', [TestimonialController::class, 'updateStatus'])->name('testimonials.status');
         Route::get('/contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
