@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -25,6 +26,12 @@ class Product extends Model
         'status',
         'meta_title',
         'meta_description',
+        'meta_keywords',
+        'og_title',
+        'og_description',
+        'og_image',
+        'canonical_url',
+        'robots',
     ];
 
     protected $casts = [
@@ -40,6 +47,22 @@ class Product extends Model
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class)->orderBy('sort_order', 'asc');
+    }
+
+    public function tags(): HasMany
+    {
+        return $this->hasMany(ProductTag::class);
+    }
+
+    public function specifications(): HasMany
+    {
+        return $this->hasMany(ProductSpecification::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function relatedProducts(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_related', 'product_id', 'related_product_id')
+            ->withTimestamps();
     }
 
     public function scopePublished(Builder $query): Builder

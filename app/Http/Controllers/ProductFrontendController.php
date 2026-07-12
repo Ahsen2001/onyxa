@@ -14,13 +14,19 @@ class ProductFrontendController extends Controller
         $categories = ProductCategory::active()->ordered()->get();
 
         $products = Product::query()
-            ->with('category')
+            ->with(['category', 'tags'])
             ->published()
             ->when($request->filled('category'), function ($query) use ($request): void {
                 $query->whereHas('category', fn ($categoryQuery) => $categoryQuery->where('slug', (string) $request->string('category')));
             })
             ->when($request->filled('search'), function ($query) use ($request): void {
-                $query->where('name', 'like', '%'.(string) $request->string('search').'%');
+                $search = (string) $request->string('search');
+
+                $query->where(function ($searchQuery) use ($search): void {
+                    $searchQuery
+                        ->where('name', 'like', '%'.$search.'%')
+                        ->orWhereHas('tags', fn ($tagQuery) => $tagQuery->where('name', 'like', '%'.$search.'%'));
+                });
             })
             ->when($request->filled('availability'), function ($query) use ($request): void {
                 $availability = (string) $request->string('availability');
@@ -43,16 +49,23 @@ class ProductFrontendController extends Controller
     {
         abort_unless($product->status === 'published', 404);
 
-        $product->load(['category', 'images']);
+        $product->load(['category', 'images', 'tags', 'specifications', 'relatedProducts.category']);
 
-        $relatedProducts = Product::query()
-            ->with('category')
-            ->published()
-            ->whereKeyNot($product->id)
-            ->where('product_category_id', $product->product_category_id)
-            ->latest()
+        $relatedProducts = $product->relatedProducts
+            ->where('status', 'published')
             ->take(3)
-            ->get();
+            ->values();
+
+        if ($relatedProducts->isEmpty()) {
+            $relatedProducts = Product::query()
+                ->with('category')
+                ->published()
+                ->whereKeyNot($product->id)
+                ->where('product_category_id', $product->product_category_id)
+                ->latest()
+                ->take(3)
+                ->get();
+        }
 
         return view('frontend.products.show', [
             'product' => $product,

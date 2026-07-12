@@ -30,25 +30,47 @@ class ProductController extends Controller
     {
         $categories = ProductCategory::active()->ordered()->get();
         $mediaItems = Media::images()->latest()->take(80)->get();
+        $allProducts = Product::query()->orderBy('name')->get(['id', 'name']);
 
-        return view('admin.products.create', compact('categories', 'mediaItems'));
+        return view('admin.products.create', compact('categories', 'mediaItems', 'allProducts'));
     }
 
     public function store(ProductRequest $request): RedirectResponse
     {
         $data = $request->validated();
+        $tags = (string) ($data['tags'] ?? '');
+        $specificationKeys = $data['specification_keys'] ?? [];
+        $specificationValues = $data['specification_values'] ?? [];
+        $relatedProductIds = $data['related_product_ids'] ?? [];
         $data['slug'] = $this->uniqueSlug($data['name']);
         $data['is_featured'] = $request->boolean('is_featured');
+        $data['robots'] = $data['robots'] ?? 'index, follow';
         $data['description'] = HtmlSanitizer::clean($data['description'] ?? null);
         $data['main_image'] = MediaLibrary::imagePathFromRequest($request->input('main_image_media_id')) ?? ($data['main_image'] ?? null);
-        unset($data['main_image_media_id'], $data['additional_media_ids']);
+        $data['og_image'] = MediaLibrary::imagePathFromRequest($request->input('og_image_media_id')) ?? ($data['og_image'] ?? null);
+        unset(
+            $data['main_image_media_id'],
+            $data['additional_media_ids'],
+            $data['tags'],
+            $data['specification_keys'],
+            $data['specification_values'],
+            $data['related_product_ids'],
+            $data['og_image_media_id']
+        );
 
         if ($request->hasFile('main_image')) {
             $data['main_image'] = MediaLibrary::store($request->file('main_image'), $request->user()->id, $data['name'], 'products')->file_path;
         }
 
+        if ($request->hasFile('og_image')) {
+            $data['og_image'] = MediaLibrary::store($request->file('og_image'), $request->user()->id, $data['name'].' OG image', 'products')->file_path;
+        }
+
         $product = Product::create($data);
         $this->storeAdditionalImages($request, $product);
+        $this->syncTags($product, $tags);
+        $this->syncSpecifications($product, $specificationKeys, $specificationValues);
+        $this->syncRelatedProducts($product, $relatedProductIds);
 
         return redirect()
             ->route('admin.products.index')
@@ -57,28 +79,46 @@ class ProductController extends Controller
 
     public function show(Product $product): View
     {
-        $product->load(['category', 'images']);
+        $product->load(['category', 'images', 'tags', 'specifications', 'relatedProducts']);
 
         return view('admin.products.show', compact('product'));
     }
 
     public function edit(Product $product): View
     {
-        $product->load('images');
+        $product->load(['images', 'tags', 'specifications', 'relatedProducts']);
         $categories = ProductCategory::active()->ordered()->get();
         $mediaItems = Media::images()->latest()->take(80)->get();
+        $allProducts = Product::query()
+            ->whereKeyNot($product->id)
+            ->orderBy('name')
+            ->get(['id', 'name']);
 
-        return view('admin.products.edit', compact('product', 'categories', 'mediaItems'));
+        return view('admin.products.edit', compact('product', 'categories', 'mediaItems', 'allProducts'));
     }
 
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
         $data = $request->validated();
+        $tags = (string) ($data['tags'] ?? '');
+        $specificationKeys = $data['specification_keys'] ?? [];
+        $specificationValues = $data['specification_values'] ?? [];
+        $relatedProductIds = $data['related_product_ids'] ?? [];
         $data['slug'] = $this->uniqueSlug($data['name'], $product->id);
         $data['is_featured'] = $request->boolean('is_featured');
+        $data['robots'] = $data['robots'] ?? 'index, follow';
         $data['description'] = HtmlSanitizer::clean($data['description'] ?? null);
         $selectedMainImage = MediaLibrary::imagePathFromRequest($request->input('main_image_media_id'));
-        unset($data['main_image_media_id'], $data['additional_media_ids']);
+        $selectedOgImage = MediaLibrary::imagePathFromRequest($request->input('og_image_media_id'));
+        unset(
+            $data['main_image_media_id'],
+            $data['additional_media_ids'],
+            $data['tags'],
+            $data['specification_keys'],
+            $data['specification_values'],
+            $data['related_product_ids'],
+            $data['og_image_media_id']
+        );
 
         if ($selectedMainImage) {
             $this->deleteImage($product->main_image);
@@ -90,8 +130,21 @@ class ProductController extends Controller
             $data['main_image'] = MediaLibrary::store($request->file('main_image'), $request->user()->id, $data['name'], 'products')->file_path;
         }
 
+        if ($selectedOgImage) {
+            $this->deleteImage($product->og_image);
+            $data['og_image'] = $selectedOgImage;
+        }
+
+        if ($request->hasFile('og_image')) {
+            $this->deleteImage($product->og_image);
+            $data['og_image'] = MediaLibrary::store($request->file('og_image'), $request->user()->id, $data['name'].' OG image', 'products')->file_path;
+        }
+
         $product->update($data);
         $this->storeAdditionalImages($request, $product);
+        $this->syncTags($product, $tags);
+        $this->syncSpecifications($product, $specificationKeys, $specificationValues);
+        $this->syncRelatedProducts($product, $relatedProductIds);
 
         return redirect()
             ->route('admin.products.edit', $product)
@@ -103,6 +156,7 @@ class ProductController extends Controller
         $product->load('images');
 
         $this->deleteImage($product->main_image);
+        $this->deleteImage($product->og_image);
 
         foreach ($product->images as $image) {
             $this->deleteImage($image->image);
@@ -170,6 +224,58 @@ class ProductController extends Controller
                 'sort_order' => $sortOrder,
             ]);
         }
+    }
+
+    private function syncTags(Product $product, string $tags): void
+    {
+        $tagNames = collect(explode(',', $tags))
+            ->map(fn (string $tag): string => trim(strip_tags($tag)))
+            ->filter()
+            ->unique(fn (string $tag): string => Str::slug($tag))
+            ->take(30)
+            ->values();
+
+        $product->tags()->delete();
+
+        foreach ($tagNames as $tagName) {
+            $product->tags()->create([
+                'name' => $tagName,
+                'slug' => Str::slug($tagName),
+            ]);
+        }
+    }
+
+    private function syncSpecifications(Product $product, array $keys, array $values): void
+    {
+        $product->specifications()->delete();
+
+        foreach ($keys as $index => $key) {
+            $key = trim(strip_tags((string) $key));
+            $value = trim(strip_tags((string) ($values[$index] ?? '')));
+
+            if ($key === '' || $value === '') {
+                continue;
+            }
+
+            $product->specifications()->create([
+                'spec_key' => $key,
+                'spec_value' => $value,
+                'sort_order' => $index,
+            ]);
+        }
+    }
+
+    private function syncRelatedProducts(Product $product, array $relatedProductIds): void
+    {
+        $ids = collect($relatedProductIds)
+            ->map(fn ($id): int => (int) $id)
+            ->filter(fn (int $id): bool => $id > 0 && $id !== $product->id)
+            ->unique()
+            ->take(12)
+            ->values()
+            ->all();
+
+        $product->relatedProducts()->sync($ids);
     }
 
     private function uniqueSlug(string $name, ?int $ignoreId = null): string

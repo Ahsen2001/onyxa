@@ -30,9 +30,25 @@ class ProductRequest extends FormRequest
             'additional_images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'additional_media_ids' => ['nullable', 'array', 'max:10'],
             'additional_media_ids.*' => ['exists:media,id'],
+            'tags' => ['nullable', 'string', 'max:1000', 'not_regex:/<script\b/i'],
+            'specification_keys' => ['nullable', 'array', 'max:30'],
+            'specification_keys.*' => ['nullable', 'string', 'max:255', 'not_regex:/<script\b/i'],
+            'specification_values' => ['nullable', 'array', 'max:30'],
+            'specification_values.*' => ['nullable', 'string', 'max:500', 'not_regex:/<script\b/i'],
+            'related_product_ids' => ['nullable', 'array', 'max:12'],
+            'related_product_ids.*' => ['integer', 'exists:products,id'],
             'availability' => ['required', Rule::in(['available', 'out_of_stock', 'made_to_order'])],
             'status' => ['required', Rule::in(['draft', 'published', 'inactive'])],
             'is_featured' => ['nullable', 'boolean'],
+            'meta_title' => ['nullable', 'string', 'max:255', 'not_regex:/<script\b/i'],
+            'meta_description' => ['nullable', 'string', 'max:500', 'not_regex:/<script\b/i'],
+            'meta_keywords' => ['nullable', 'string', 'max:500', 'not_regex:/<script\b/i'],
+            'og_title' => ['nullable', 'string', 'max:255', 'not_regex:/<script\b/i'],
+            'og_description' => ['nullable', 'string', 'max:500', 'not_regex:/<script\b/i'],
+            'og_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'og_image_media_id' => ['nullable', 'exists:media,id'],
+            'canonical_url' => ['nullable', 'url', 'max:255'],
+            'robots' => ['nullable', Rule::in(['index, follow', 'index, nofollow', 'noindex, follow', 'noindex, nofollow'])],
         ];
     }
 
@@ -47,6 +63,8 @@ class ProductRequest extends FormRequest
             'main_image.max' => 'The main product image must not be larger than 4 MB.',
             'additional_images.max' => 'You can upload up to 10 additional images at once.',
             'additional_images.*.mimes' => 'Additional product images must be JPG, JPEG, PNG, or WebP.',
+            'og_image.image' => 'The OG image must be a valid image.',
+            'og_image.max' => 'The OG image must not be larger than 4 MB.',
             '*.not_regex' => 'Script tags are not allowed.',
         ];
     }

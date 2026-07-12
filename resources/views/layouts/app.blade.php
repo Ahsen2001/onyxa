@@ -7,8 +7,12 @@
         $seo = seo_meta([
             'meta_title' => trim($__env->yieldContent('title', setting('company_name', 'ONYXA Private Limited'))),
             'meta_description' => trim($__env->yieldContent('meta_description', 'ONYXA Private Limited creates modern coconut shell handicrafts from natural materials.')),
+            'meta_keywords' => trim($__env->yieldContent('meta_keywords', '')),
+            'og_title' => trim($__env->yieldContent('og_title', '')),
+            'og_description' => trim($__env->yieldContent('og_description', '')),
             'canonical_url' => trim($__env->yieldContent('canonical', url()->current())),
             'og_image' => trim($__env->yieldContent('og_image', asset('logo.png'))),
+            'robots' => trim($__env->yieldContent('robots', 'index, follow')),
         ]);
         $metaTitle = $seo['meta_title'];
         $metaDescription = $seo['meta_description'];

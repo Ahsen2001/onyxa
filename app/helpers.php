@@ -101,8 +101,8 @@ if (! function_exists('seo_meta')) {
 
         $metaTitle = $record?->meta_title ?: ($defaults['meta_title'] ?? setting('company_name', 'ONYXA Private Limited'));
         $metaDescription = $record?->meta_description ?: ($defaults['meta_description'] ?? 'ONYXA Private Limited creates modern coconut shell handicrafts from natural materials.');
-        $ogTitle = $record?->og_title ?: $metaTitle;
-        $ogDescription = $record?->og_description ?: $metaDescription;
+        $ogTitle = $record?->og_title ?: ($defaults['og_title'] ?? $metaTitle) ?: $metaTitle;
+        $ogDescription = $record?->og_description ?: ($defaults['og_description'] ?? $metaDescription) ?: $metaDescription;
         $ogImage = $record?->ogImageUrl() ?: ($defaults['og_image'] ?? asset('logo.png'));
 
         return [

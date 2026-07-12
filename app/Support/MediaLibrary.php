@@ -42,7 +42,7 @@ class MediaLibrary
     {
         $path = $media->file_path;
 
-        return Product::query()->where('main_image', $path)->exists()
+        return Product::query()->where('main_image', $path)->orWhere('og_image', $path)->exists()
             || ProductImage::query()->where('image', $path)->exists()
             || News::query()->where('featured_image', $path)->exists()
             || Event::query()->where('featured_image', $path)->exists()
