@@ -18,19 +18,20 @@
             <div class="absolute left-0 right-0 top-20 hidden border-b border-[#E8DCCB] bg-[#FFF8EC] px-4 py-4 shadow-sm peer-checked:block lg:static lg:block lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none">
                 <div class="flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-2">
                     @foreach ([
-                        ['label' => 'Home', 'route' => 'home'],
-                        ['label' => 'About Us', 'route' => 'about'],
-                        ['label' => 'Products', 'route' => 'products.index'],
-                        ['label' => 'News', 'route' => 'news.index'],
-                        ['label' => 'Events', 'route' => 'events.index'],
-                        ['label' => 'Gallery', 'route' => 'gallery.index'],
-                        ['label' => 'Sustainability', 'route' => 'sustainability'],
-                        ['label' => 'Contact', 'route' => 'contact'],
+                    ['label' => 'Home', 'route' => 'home'],
+                    ['label' => 'About', 'route' => 'about'],
+                    ['label' => 'Products', 'route' => 'products.index'],
+                    ['label' => 'News', 'route' => 'news.index'],
+                    ['label' => 'Events', 'route' => 'events.index'],
+                    ['label' => 'Gallery', 'route' => 'gallery.index'],
+                    ['label' => 'Testimonials', 'route' => 'testimonials.index'],
+                    ['label' => 'Sustainability', 'route' => 'sustainability'],
+                    ['label' => 'Contact', 'route' => 'contact'],
                     ] as $link)
-                        <a href="{{ route($link['route']) }}"
-                           class="rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs($link['route']) ? 'bg-[#8B5E3C] text-white' : 'text-[#2B2B2B] hover:bg-[#F0E4D2] hover:text-[#8B5E3C]' }}">
-                            {{ $link['label'] }}
-                        </a>
+                    <a href="{{ route($link['route']) }}"
+                        class="rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs($link['route']) ? 'bg-[#8B5E3C] text-white' : 'text-[#2B2B2B] hover:bg-[#F0E4D2] hover:text-[#8B5E3C]' }}">
+                        {{ $link['label'] }}
+                    </a>
                     @endforeach
                 </div>
             </div>

@@ -165,6 +165,32 @@
         </div>
     </section>
 
+    <section class="bg-white py-16">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+                <div>
+                    <p class="text-sm font-semibold uppercase tracking-[0.18em] text-[#2E7D32]">Testimonials</p>
+                    <h2 class="mt-3 text-3xl font-semibold">Loved by customers and partners</h2>
+                </div>
+                <a href="{{ route('testimonials.index') }}" class="text-sm font-semibold text-[#8B5E3C]">View all testimonials</a>
+            </div>
+
+            <div class="flex snap-x gap-5 overflow-x-auto pb-4">
+                @forelse ($testimonials as $testimonial)
+                    <x-ui.testimonial-card :testimonial="$testimonial" class="min-w-[280px] snap-start sm:min-w-[360px] lg:min-w-[390px]" />
+                @empty
+                    @foreach (['Beautiful handmade finish and thoughtful packaging.', 'Natural textures that feel warm, useful, and elegant.', 'A sustainable gift collection our customers noticed immediately.'] as $sample)
+                        <article class="min-w-[280px] snap-start rounded-xl border border-[#E8DCCB] bg-[#FFF8EC] p-6 sm:min-w-[360px] lg:min-w-[390px]">
+                            <div class="text-[#D9A441]">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                            <p class="mt-4 leading-8 text-[#5F584F]">"{{ $sample }}"</p>
+                            <p class="mt-6 font-semibold">ONYXA customer</p>
+                        </article>
+                    @endforeach
+                @endforelse
+            </div>
+        </div>
+    </section>
+
     <section class="bg-[#FFF8EC] py-16">
         <div class="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
             <h2 class="text-3xl font-semibold">Start a conversation with ONYXA</h2>

@@ -8,6 +8,7 @@ use App\Models\News;
 use App\Models\Page;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\Testimonial;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -44,7 +45,8 @@ class MediaLibrary
             || ProductImage::query()->where('image', $path)->exists()
             || News::query()->where('featured_image', $path)->exists()
             || Event::query()->where('featured_image', $path)->exists()
-            || Page::query()->where('image', $path)->exists();
+            || Page::query()->where('image', $path)->exists()
+            || Testimonial::query()->where('image', $path)->exists();
     }
 
     public static function deleteIfUntracked(?string $path): void

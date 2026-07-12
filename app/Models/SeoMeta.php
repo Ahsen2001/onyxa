@@ -34,6 +34,7 @@ class SeoMeta extends Model
             'events' => 'Events listing',
             'event_detail' => 'Event details',
             'gallery' => 'Gallery',
+            'testimonials' => 'Testimonials',
             'contact' => 'Contact page',
         ];
     }

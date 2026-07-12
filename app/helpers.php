@@ -67,6 +67,7 @@ if (! function_exists('seo_context')) {
             'events.index' => ['events', null],
             'events.show' => ['event_detail', seo_route_model_id($route?->parameter('event'))],
             'gallery.index' => ['gallery', null],
+            'testimonials.index' => ['testimonials', null],
             'contact' => ['contact', null],
             default => [null, null],
         };

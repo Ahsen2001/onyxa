@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Gallery;
 use App\Models\News;
 use App\Models\Product;
+use App\Models\Testimonial;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -34,6 +35,11 @@ class HomeController extends Controller
                 ->latest('updated_at')
                 ->latest('created_at')
                 ->take(6)
+                ->get(),
+            'testimonials' => Testimonial::query()
+                ->active()
+                ->latest()
+                ->take(8)
                 ->get(),
         ]);
     }

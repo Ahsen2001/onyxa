@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SeoMetaController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Frontend\AboutController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\EventController as FrontendEventController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController as FrontendNewsController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProductController;
 use App\Http\Controllers\Frontend\SustainabilityController;
+use App\Http\Controllers\Frontend\TestimonialController as FrontendTestimonialController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +38,7 @@ Route::get('/news/{news:slug}', [FrontendNewsController::class, 'show'])->name('
 Route::get('/events', [FrontendEventController::class, 'index'])->name('events.index');
 Route::get('/events/{event:slug}', [FrontendEventController::class, 'show'])->name('events.show');
 Route::get('/gallery', [FrontendGalleryController::class, 'index'])->name('gallery.index');
+Route::get('/testimonials', [FrontendTestimonialController::class, 'index'])->name('testimonials.index');
 Route::get('/sustainability', [SustainabilityController::class, 'index'])->name('sustainability');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
@@ -71,6 +74,8 @@ Route::middleware(['auth', 'admin'])
         Route::resource('media', MediaController::class)
             ->parameters(['media' => 'media'])
             ->only(['index', 'store', 'destroy']);
+        Route::resource('testimonials', TestimonialController::class)->except(['show']);
+        Route::patch('/testimonials/{testimonial}/status', [TestimonialController::class, 'updateStatus'])->name('testimonials.status');
         Route::get('/contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
         Route::get('/contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
         Route::patch('/contact-messages/{contactMessage}/read', [ContactMessageController::class, 'markRead'])->name('contact-messages.read');
