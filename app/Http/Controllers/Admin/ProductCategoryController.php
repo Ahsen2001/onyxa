@@ -31,6 +31,7 @@ class ProductCategoryController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['name']);
+        $data['product_names'] = $this->parseProductNames($data['product_names'] ?? null);
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('categories', 'public');
@@ -52,6 +53,7 @@ class ProductCategoryController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['name'], $productCategory->id);
+        $data['product_names'] = $this->parseProductNames($data['product_names'] ?? null);
 
         if ($request->hasFile('image')) {
             $this->deleteImage($productCategory->image);
@@ -106,6 +108,16 @@ class ProductCategoryController extends Controller
         }
 
         return $slug;
+    }
+
+    private function parseProductNames(?string $names): array
+    {
+        return collect(preg_split('/\r\n|\r|\n/', (string) $names))
+            ->map(fn (string $name): string => trim(strip_tags($name)))
+            ->filter()
+            ->unique(fn (string $name): string => Str::lower($name))
+            ->values()
+            ->all();
     }
 
     private function deleteImage(?string $path): void

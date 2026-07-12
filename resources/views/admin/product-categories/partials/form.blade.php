@@ -10,6 +10,12 @@
         <textarea name="description" rows="5" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3 focus:border-[#8B5E3C] focus:outline-none">{{ old('description', $category?->description) }}</textarea>
     </div>
 
+    <div>
+        <label class="mb-2 block text-sm font-semibold">Product Names</label>
+        <textarea name="product_names" rows="8" placeholder="Enter one product name per line" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3 focus:border-[#8B5E3C] focus:outline-none">{{ old('product_names', collect($category?->product_names ?? [])->join("\n")) }}</textarea>
+        <p class="mt-2 text-xs text-[#6F665A]">These names will appear in the Product Name dropdown after this category is selected on the Add Product page.</p>
+    </div>
+
     <div class="grid gap-5 md:grid-cols-2">
         <div>
             <label class="mb-2 block text-sm font-semibold">Image</label>

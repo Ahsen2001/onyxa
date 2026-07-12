@@ -13,13 +13,23 @@
     $selectedRelated = collect(old('related_product_ids', $product?->relatedProducts?->pluck('id')->all() ?? []))
         ->map(fn ($id) => (int) $id)
         ->all();
+    $selectedCategoryId = (int) old('product_category_id', $product?->product_category_id);
+    $currentProductName = old('name', $product?->name);
+    $categoryProductNames = $categories->mapWithKeys(fn ($category) => [
+        $category->id => array_values($category->product_names ?? []),
+    ]);
+    $selectedCategoryNames = collect($categoryProductNames[$selectedCategoryId] ?? []);
+
+    if ($currentProductName && ! $selectedCategoryNames->contains($currentProductName)) {
+        $selectedCategoryNames = $selectedCategoryNames->prepend($currentProductName);
+    }
 @endphp
 
 <div class="grid gap-6">
     <div class="grid gap-5 lg:grid-cols-2">
         <div>
             <label class="mb-2 block text-sm font-semibold">Product Category</label>
-            <select name="product_category_id" required class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3 focus:border-[#8B5E3C] focus:outline-none">
+            <select name="product_category_id" required data-product-category-select class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3 focus:border-[#8B5E3C] focus:outline-none">
                 <option value="">Select category</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}" @selected((int) old('product_category_id', $product?->product_category_id) === $category->id)>{{ $category->name }}</option>
@@ -29,8 +39,13 @@
 
         <div>
             <label class="mb-2 block text-sm font-semibold">Product Name</label>
-            <input type="text" name="name" value="{{ old('name', $product?->name) }}" required class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3 focus:border-[#8B5E3C] focus:outline-none">
-            <p class="mt-2 text-xs text-[#6F665A]">Slug is generated automatically from the product name.</p>
+            <select name="name" required data-product-name-select data-current-product-name="{{ $currentProductName }}" data-product-name-options='@json($categoryProductNames)' class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3 focus:border-[#8B5E3C] focus:outline-none">
+                <option value="">Select product category first</option>
+                @foreach ($selectedCategoryNames as $productName)
+                    <option value="{{ $productName }}" @selected($currentProductName === $productName)>{{ $productName }}</option>
+                @endforeach
+            </select>
+            <p class="mt-2 text-xs text-[#6F665A]">Select a Product Category first. The Product Name list is managed from Product Categories.</p>
         </div>
     </div>
 

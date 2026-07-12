@@ -16,6 +16,7 @@
                     <tr>
                         <th class="px-5 py-3 font-semibold">Category</th>
                         <th class="px-5 py-3 font-semibold">Slug</th>
+                        <th class="px-5 py-3 font-semibold">Product Names</th>
                         <th class="px-5 py-3 font-semibold">Products</th>
                         <th class="px-5 py-3 font-semibold">Status</th>
                         <th class="px-5 py-3 text-right font-semibold">Actions</th>
@@ -38,6 +39,10 @@
                                 </div>
                             </td>
                             <td class="px-5 py-4 text-[#6F665A]">{{ $category->slug }}</td>
+                            <td class="px-5 py-4">
+                                <p class="font-semibold">{{ count($category->product_names ?? []) }} names</p>
+                                <p class="mt-1 line-clamp-1 max-w-xs text-xs text-[#6F665A]">{{ collect($category->product_names ?? [])->take(4)->join(', ') }}</p>
+                            </td>
                             <td class="px-5 py-4">{{ $category->products_count }}</td>
                             <td class="px-5 py-4">
                                 <x-ui.status-badge :status="$category->status" />
@@ -63,7 +68,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-5 py-10 text-center text-[#6F665A]">No categories found.</td>
+                            <td colspan="6" class="px-5 py-10 text-center text-[#6F665A]">No categories found.</td>
                         </tr>
                     @endforelse
                 </tbody>

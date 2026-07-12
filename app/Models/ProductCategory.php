@@ -12,6 +12,7 @@ class ProductCategory extends Model
         'name',
         'slug',
         'description',
+        'product_names',
         'image',
         'sort_order',
         'status',
@@ -19,6 +20,7 @@ class ProductCategory extends Model
 
     protected $casts = [
         'sort_order' => 'integer',
+        'product_names' => 'array',
     ];
 
     public function products(): HasMany

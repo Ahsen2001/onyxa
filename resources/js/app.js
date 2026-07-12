@@ -131,14 +131,74 @@ const initProductGalleries = () => {
     });
 };
 
+const initProductNameDropdowns = () => {
+    const categorySelect = document.querySelector('[data-product-category-select]');
+    const nameSelect = document.querySelector('[data-product-name-select]');
+
+    if (! categorySelect || ! nameSelect) {
+        return;
+    }
+
+    let optionsByCategory = {};
+
+    try {
+        optionsByCategory = JSON.parse(nameSelect.dataset.productNameOptions || '{}');
+    } catch (error) {
+        console.error('Product name options could not be parsed:', error);
+    }
+
+    const renderNames = () => {
+        const categoryId = categorySelect.value;
+        const names = optionsByCategory[categoryId] || [];
+        const currentName = nameSelect.dataset.currentProductName || '';
+        const selectedValue = names.includes(nameSelect.value) ? nameSelect.value : currentName;
+
+        nameSelect.innerHTML = '';
+
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = categoryId ? 'Select product name' : 'Select product category first';
+        nameSelect.appendChild(placeholder);
+
+        if (selectedValue && ! names.includes(selectedValue)) {
+            const currentOption = document.createElement('option');
+            currentOption.value = selectedValue;
+            currentOption.textContent = selectedValue;
+            nameSelect.appendChild(currentOption);
+        }
+
+        names.forEach((name) => {
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = name;
+            nameSelect.appendChild(option);
+        });
+
+        nameSelect.value = selectedValue && [...nameSelect.options].some((option) => option.value === selectedValue)
+            ? selectedValue
+            : '';
+        nameSelect.disabled = categoryId === '' || nameSelect.options.length <= 1;
+    };
+
+    categorySelect.addEventListener('change', () => {
+        nameSelect.value = '';
+        nameSelect.dataset.currentProductName = '';
+        renderNames();
+    });
+
+    renderNames();
+};
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initMediaPickers();
         initRichTextEditors();
         initProductGalleries();
+        initProductNameDropdowns();
     });
 } else {
     initMediaPickers();
     initRichTextEditors();
     initProductGalleries();
+    initProductNameDropdowns();
 }

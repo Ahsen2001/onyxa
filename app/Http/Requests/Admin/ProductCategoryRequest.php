@@ -19,6 +19,7 @@ class ProductCategoryRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', 'not_regex:/<script\b/i', Rule::unique('product_categories', 'name')->ignore($category?->id)],
             'description' => ['nullable', 'string', 'max:3000', 'not_regex:/<script\b/i'],
+            'product_names' => ['nullable', 'string', 'max:5000', 'not_regex:/<script\b/i'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ];

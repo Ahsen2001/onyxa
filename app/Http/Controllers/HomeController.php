@@ -14,14 +14,28 @@ class HomeController extends Controller
 {
     public function index(): View
     {
-        return view('frontend.home', [
-            'featuredProducts' => Product::query()
+        $featuredProducts = Product::query()
+            ->with('category')
+            ->published()
+            ->featured()
+            ->latest('updated_at')
+            ->take(6)
+            ->get();
+
+        if ($featuredProducts->count() < 6) {
+            $fillProducts = Product::query()
                 ->with('category')
                 ->published()
-                ->featured()
-                ->latest()
-                ->take(6)
-                ->get(),
+                ->whereNotIn('id', $featuredProducts->pluck('id'))
+                ->latest('updated_at')
+                ->take(6 - $featuredProducts->count())
+                ->get();
+
+            $featuredProducts = $featuredProducts->concat($fillProducts);
+        }
+
+        return view('frontend.home', [
+            'featuredProducts' => $featuredProducts,
             'latestNews' => News::query()
                 ->latestPublished()
                 ->take(3)
