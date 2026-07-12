@@ -42,12 +42,12 @@ Route::get('/gallery', [FrontendGalleryController::class, 'index'])->name('galle
 Route::get('/testimonials', [FrontendTestimonialController::class, 'index'])->name('testimonials.index');
 Route::get('/sustainability', [SustainabilityController::class, 'index'])->name('sustainability');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-Route::get('/search', [\App\Http\Controllers\Frontend\SearchController::class, 'index'])->name('search');
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:contact-form')->name('contact.store');
+Route::get('/search', [\App\Http\Controllers\Frontend\SearchController::class, 'index'])->middleware('throttle:public-search')->name('search');
 
 Route::redirect('/login', '/admin/login')->name('login');
 Route::get('/admin/login', [AdminAuthController::class, 'create'])->name('admin.login');
-Route::post('/admin/login', [AdminAuthController::class, 'store'])->name('admin.login.store');
+Route::post('/admin/login', [AdminAuthController::class, 'store'])->middleware('throttle:admin-login')->name('admin.login.store');
 Route::redirect('/dashboard', '/admin')->middleware(['auth', 'admin'])->name('dashboard');
 
 Route::middleware(['auth', 'admin'])

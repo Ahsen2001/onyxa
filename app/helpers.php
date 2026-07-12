@@ -51,6 +51,58 @@ if (! function_exists('rich_text')) {
     }
 }
 
+if (! function_exists('safe_json_ld')) {
+    function safe_json_ld(?string $json): ?string
+    {
+        if (! $json) {
+            return null;
+        }
+
+        json_decode($json);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return null;
+        }
+
+        return preg_replace('/<\/script/i', '<\/script', $json);
+    }
+}
+
+if (! function_exists('safe_google_map_embed')) {
+    function safe_google_map_embed(?string $html, string $default): string
+    {
+        $html = trim((string) $html);
+
+        if ($html === '') {
+            return $default;
+        }
+
+        $document = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $document->loadHTML('<!doctype html><html><body>'.$html.'</body></html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
+
+        $iframe = $document->getElementsByTagName('iframe')->item(0);
+
+        if (! $iframe instanceof DOMElement) {
+            return $default;
+        }
+
+        $src = trim($iframe->getAttribute('src'));
+        $host = strtolower((string) parse_url($src, PHP_URL_HOST));
+        $path = (string) parse_url($src, PHP_URL_PATH);
+
+        if (! in_array($host, ['www.google.com', 'google.com'], true) || ! str_starts_with($path, '/maps/embed')) {
+            return $default;
+        }
+
+        return sprintf(
+            '<iframe src="%s" width="600" height="450" class="h-72 w-full rounded-lg border-0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>',
+            e($src)
+        );
+    }
+}
+
 if (! function_exists('seo_context')) {
     function seo_context(): array
     {
@@ -114,7 +166,7 @@ if (! function_exists('seo_meta')) {
             'og_image' => $ogImage,
             'canonical_url' => $record?->canonical_url ?: ($defaults['canonical_url'] ?? url()->current()),
             'robots' => $record?->robots ?: ($defaults['robots'] ?? 'index, follow'),
-            'schema_json_ld' => $record?->schema_json_ld ?: ($defaults['schema_json_ld'] ?? null),
+            'schema_json_ld' => safe_json_ld($record?->schema_json_ld ?: ($defaults['schema_json_ld'] ?? null)),
         ];
     }
 }

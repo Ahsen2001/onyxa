@@ -75,7 +75,7 @@ class ContactMessageController extends Controller
     public function updateNotes(Request $request, ContactMessage $contactMessage): RedirectResponse
     {
         $request->validate([
-            'internal_notes' => 'nullable|string',
+            'internal_notes' => 'nullable|string|max:5000',
         ]);
 
         $contactMessage->update([
@@ -89,7 +89,7 @@ class ContactMessageController extends Controller
     {
         $request->validate([
             'reply_subject' => 'required|string|max:255',
-            'reply_message' => 'required|string',
+            'reply_message' => 'required|string|max:10000',
         ]);
 
         $subject = $request->input('reply_subject');
@@ -107,7 +107,7 @@ class ContactMessageController extends Controller
             return back()->with('success', 'Reply email sent successfully.');
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Failed to send contact message reply email: ' . $e->getMessage());
-            return back()->withErrors(['reply_error' => 'Failed to send reply email: ' . $e->getMessage()]);
+            return back()->withErrors(['reply_error' => 'Failed to send reply email. Please check mail settings and try again.']);
         }
     }
 
@@ -152,16 +152,16 @@ class ContactMessageController extends Controller
             foreach ($messages as $message) {
                 fputcsv($file, [
                     $message->id,
-                    $message->name,
-                    $message->email,
-                    $message->phone,
-                    $message->subject,
-                    $message->message,
+                    $this->csvSafe($message->name),
+                    $this->csvSafe($message->email),
+                    $this->csvSafe($message->phone),
+                    $this->csvSafe($message->subject),
+                    $this->csvSafe($message->message),
                     ucfirst($message->status),
-                    $message->ip_address,
+                    $this->csvSafe($message->ip_address),
                     $message->replied_at ? $message->replied_at->format('Y-m-d H:i:s') : 'N/A',
                     $message->created_at->format('Y-m-d H:i:s'),
-                    $message->internal_notes,
+                    $this->csvSafe($message->internal_notes),
                 ]);
             }
 
@@ -176,5 +176,16 @@ class ContactMessageController extends Controller
         ContactMessage::destroy($contactMessage->getKey());
 
         return redirect()->route('admin.contact-messages.index')->with('success', 'Message deleted successfully.');
+    }
+
+    private function csvSafe(?string $value): string
+    {
+        $value = (string) $value;
+
+        if ($value !== '' && preg_match('/^[=+\-@]/', $value) === 1) {
+            return "'".$value;
+        }
+
+        return $value;
     }
 }
