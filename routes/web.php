@@ -43,6 +43,7 @@ Route::get('/testimonials', [FrontendTestimonialController::class, 'index'])->na
 Route::get('/sustainability', [SustainabilityController::class, 'index'])->name('sustainability');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/search', [\App\Http\Controllers\Frontend\SearchController::class, 'index'])->name('search');
 
 Route::redirect('/login', '/admin/login')->name('login');
 Route::get('/admin/login', [AdminAuthController::class, 'create'])->name('admin.login');
