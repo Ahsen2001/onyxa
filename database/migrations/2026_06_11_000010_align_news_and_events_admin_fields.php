@@ -34,7 +34,10 @@ return new class extends Migration
         }
 
         DB::table('news')->whereNotIn('status', ['draft', 'published'])->update(['status' => 'draft']);
-        DB::statement("ALTER TABLE news MODIFY status ENUM('draft', 'published') NOT NULL DEFAULT 'draft'");
+
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE news MODIFY status ENUM('draft', 'published') NOT NULL DEFAULT 'draft'");
+        }
 
         Schema::table('events', function (Blueprint $table) {
             if (! Schema::hasColumn('events', 'user_id')) {
@@ -52,12 +55,16 @@ return new class extends Migration
         DB::table('events')->where('status', 'published')->update(['status' => 'upcoming']);
         DB::table('events')->where('status', 'draft')->update(['status' => 'upcoming']);
 
-        DB::statement("ALTER TABLE events MODIFY status ENUM('upcoming', 'completed', 'cancelled') NOT NULL DEFAULT 'upcoming'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE events MODIFY status ENUM('upcoming', 'completed', 'cancelled') NOT NULL DEFAULT 'upcoming'");
+        }
     }
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE news MODIFY status ENUM('draft', 'published', 'archived') NOT NULL DEFAULT 'draft'");
-        DB::statement("ALTER TABLE events MODIFY status ENUM('draft', 'published', 'completed', 'cancelled') NOT NULL DEFAULT 'draft'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE news MODIFY status ENUM('draft', 'published', 'archived') NOT NULL DEFAULT 'draft'");
+            DB::statement("ALTER TABLE events MODIFY status ENUM('draft', 'published', 'completed', 'cancelled') NOT NULL DEFAULT 'draft'");
+        }
     }
 };

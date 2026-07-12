@@ -3,7 +3,7 @@
         <div class="flex min-h-20 items-center justify-between gap-4">
             <a href="{{ route('home') }}" class="flex items-center gap-3">
                 @php($logo = setting('logo'))
-                <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.png') }}" alt="ONYXA logo" class="h-12 w-12 rounded-full object-cover ring-2 ring-[#D9A441]">
+                <img src="{{ $logo ? asset('storage/'.$logo) : asset('logo.png') }}" alt="ONYXA logo" class="h-16 w-16 shrink-0 rounded-full bg-white p-1 object-contain ring-2 ring-[#D9A441]">
                 <div>
                     <p class="text-lg font-semibold leading-tight text-[#2B2B2B]">{{ setting('company_name', 'ONYXA') }}</p>
                     <p class="text-xs font-medium uppercase tracking-[0.18em] text-[#8B5E3C]">{{ setting('tagline', 'Private Limited') }}</p>

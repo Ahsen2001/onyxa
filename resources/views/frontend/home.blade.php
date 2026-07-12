@@ -23,10 +23,10 @@
             </div>
 
             <div class="relative">
-                <div class="aspect-[4/3] overflow-hidden rounded-2xl border border-[#E8DCCB] bg-[#EAD7BD] shadow-xl">
-                    <img src="{{ asset('logo.png') }}" alt="ONYXA coconut shell handicraft brand" class="h-full w-full object-cover">
+                <div class="flex min-h-[340px] items-center justify-center overflow-hidden rounded-2xl border border-[#E8DCCB] bg-white p-6 shadow-xl sm:min-h-[420px] lg:min-h-[500px]">
+                    <img src="{{ asset('logo.png') }}" alt="ONYXA coconut shell handicraft brand" class="max-h-[300px] w-full object-contain sm:max-h-[380px] lg:max-h-[460px]">
                 </div>
-                <div class="absolute -bottom-5 left-6 rounded-xl bg-white px-5 py-4 shadow-lg">
+                <div class="mx-auto mt-4 max-w-xl rounded-xl bg-white px-5 py-4 shadow-lg">
                     <p class="text-sm font-medium text-[#6F665A]">Eco-friendly artistry</p>
                     <p class="text-2xl font-semibold text-[#2E7D32]">Handmade in nature's tone</p>
                 </div>
