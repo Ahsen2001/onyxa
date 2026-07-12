@@ -1,0 +1,16 @@
+[17-Jun-2026 09:15:13 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Foundation\Testing\TestCase" not found in /home/onyxalan/public_html/tests/TestCase.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/tests/TestCase.php on line 7
+[17-Jun-2026 09:15:13 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Foundation\Testing\TestCase" not found in /home/onyxalan/public_html/tests/TestCase.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/tests/TestCase.php on line 7
+[17-Jun-2026 09:44:14 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Foundation\Testing\TestCase" not found in /home/onyxalan/public_html/tests/TestCase.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/tests/TestCase.php on line 7
+[17-Jun-2026 09:58:26 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Foundation\Testing\TestCase" not found in /home/onyxalan/public_html/tests/TestCase.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/tests/TestCase.php on line 7

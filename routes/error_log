@@ -1,0 +1,32 @@
+[17-Jun-2026 09:15:13 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/onyxalan/public_html/routes/web.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/routes/web.php on line 27
+[17-Jun-2026 09:15:13 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/onyxalan/public_html/routes/console.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/routes/console.php on line 6
+[17-Jun-2026 09:15:13 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/onyxalan/public_html/routes/web.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/routes/web.php on line 27
+[17-Jun-2026 09:15:13 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/onyxalan/public_html/routes/console.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/routes/console.php on line 6
+[17-Jun-2026 09:44:14 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/onyxalan/public_html/routes/web.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/routes/web.php on line 27
+[17-Jun-2026 09:44:15 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/onyxalan/public_html/routes/console.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/routes/console.php on line 6
+[17-Jun-2026 09:58:26 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Route" not found in /home/onyxalan/public_html/routes/web.php:27
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/routes/web.php on line 27
+[17-Jun-2026 09:58:27 UTC] PHP Fatal error:  Uncaught Error: Class "Illuminate\Support\Facades\Artisan" not found in /home/onyxalan/public_html/routes/console.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/onyxalan/public_html/routes/console.php on line 6
