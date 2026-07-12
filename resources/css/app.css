@@ -15,3 +15,12 @@
     --color-brand-dark: #2B2B2B;
     --shadow-soft: 0 16px 40px rgb(43 43 43 / 0.08);
 }
+
+.ck-editor__editable_inline {
+    min-height: 280px;
+}
+
+.ck-content img {
+    max-width: 100%;
+    height: auto;
+}

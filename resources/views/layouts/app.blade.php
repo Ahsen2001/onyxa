@@ -4,25 +4,38 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @php
-        $metaTitle = trim($__env->yieldContent('title', setting('company_name', 'ONYXA Private Limited')));
-        $metaDescription = trim($__env->yieldContent('meta_description', 'ONYXA Private Limited creates modern coconut shell handicrafts from natural materials.'));
-        $canonicalUrl = trim($__env->yieldContent('canonical', url()->current()));
-        $ogImage = trim($__env->yieldContent('og_image', asset('logo.png')));
+        $seo = seo_meta([
+            'meta_title' => trim($__env->yieldContent('title', setting('company_name', 'ONYXA Private Limited'))),
+            'meta_description' => trim($__env->yieldContent('meta_description', 'ONYXA Private Limited creates modern coconut shell handicrafts from natural materials.')),
+            'canonical_url' => trim($__env->yieldContent('canonical', url()->current())),
+            'og_image' => trim($__env->yieldContent('og_image', asset('logo.png'))),
+        ]);
+        $metaTitle = $seo['meta_title'];
+        $metaDescription = $seo['meta_description'];
+        $canonicalUrl = $seo['canonical_url'];
+        $ogImage = $seo['og_image'];
         $ogType = trim($__env->yieldContent('og_type', 'website'));
     @endphp
     <title>{{ $metaTitle }}</title>
     <meta name="description" content="{{ $metaDescription }}">
+    @if ($seo['meta_keywords'])
+        <meta name="keywords" content="{{ $seo['meta_keywords'] }}">
+    @endif
+    <meta name="robots" content="{{ $seo['robots'] }}">
     <link rel="canonical" href="{{ $canonicalUrl }}">
     <meta property="og:site_name" content="{{ setting('company_name', 'ONYXA Private Limited') }}">
-    <meta property="og:title" content="{{ $metaTitle }}">
-    <meta property="og:description" content="{{ $metaDescription }}">
+    <meta property="og:title" content="{{ $seo['og_title'] }}">
+    <meta property="og:description" content="{{ $seo['og_description'] }}">
     <meta property="og:type" content="{{ $ogType }}">
     <meta property="og:url" content="{{ $canonicalUrl }}">
     <meta property="og:image" content="{{ $ogImage }}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $metaTitle }}">
-    <meta name="twitter:description" content="{{ $metaDescription }}">
+    <meta name="twitter:title" content="{{ $seo['og_title'] }}">
+    <meta name="twitter:description" content="{{ $seo['og_description'] }}">
     <meta name="twitter:image" content="{{ $ogImage }}">
+    @if ($seo['schema_json_ld'])
+        <script type="application/ld+json">{!! $seo['schema_json_ld'] !!}</script>
+    @endif
     @php($favicon = setting('favicon'))
     <link rel="icon" type="image/png" href="{{ $favicon ? asset('storage/'.$favicon) : asset('logo.png') }}">
     <link rel="apple-touch-icon" href="{{ $favicon ? asset('storage/'.$favicon) : asset('logo.png') }}">

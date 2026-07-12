@@ -9,9 +9,9 @@
                     <p class="text-xs uppercase tracking-[0.18em] text-[#D9A441]">{{ setting('tagline', 'Natural Handicrafts') }}</p>
                 </div>
             </div>
-            <p class="mt-4 text-sm leading-6 text-white/70">
-                {{ page_section('footer', 'description', 'content', setting('footer_text', 'Crafting refined coconut shell handicrafts that celebrate Sri Lankan artistry, natural textures, and sustainable living.')) }}
-            </p>
+            <div class="mt-4 text-sm leading-6 text-white/70">
+                {!! rich_text(page_section('footer', 'description', 'content', setting('footer_text', 'Crafting refined coconut shell handicrafts that celebrate Sri Lankan artistry, natural textures, and sustainable living.'))) !!}
+            </div>
         </div>
 
         <div>

@@ -1,16 +1,19 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\CkeditorUploadController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\GalleryCategoryController;
 use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SeoMetaController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Frontend\AboutController;
 use App\Http\Controllers\Frontend\ContactController;
@@ -65,6 +68,9 @@ Route::middleware(['auth', 'admin'])
         Route::patch('/gallery-categories/{galleryCategory}/status', [GalleryCategoryController::class, 'updateStatus'])->name('gallery-categories.status');
         Route::resource('galleries', GalleryController::class)->except(['show']);
         Route::patch('/galleries/{gallery}/status', [GalleryController::class, 'updateStatus'])->name('galleries.status');
+        Route::resource('media', MediaController::class)
+            ->parameters(['media' => 'media'])
+            ->only(['index', 'store', 'destroy']);
         Route::get('/contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
         Route::get('/contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
         Route::patch('/contact-messages/{contactMessage}/read', [ContactMessageController::class, 'markRead'])->name('contact-messages.read');
@@ -73,6 +79,10 @@ Route::middleware(['auth', 'admin'])
         Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
         Route::get('/pages/{page}/edit', [PageController::class, 'edit'])->name('pages.edit');
         Route::put('/pages/{page}', [PageController::class, 'update'])->name('pages.update');
+        Route::post('/ckeditor/upload', [CkeditorUploadController::class, 'store'])->name('ckeditor.upload');
+        Route::resource('seo-meta', SeoMetaController::class)
+            ->parameters(['seo-meta' => 'seoMeta'])
+            ->except(['show']);
         Route::get('/settings', [SettingController::class, 'edit'])->name('settings.index');
         Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

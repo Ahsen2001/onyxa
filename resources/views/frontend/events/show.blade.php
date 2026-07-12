@@ -23,7 +23,7 @@
                         <p><strong>Time:</strong> {{ $event->event_time ? substr($event->event_time, 0, 5) : '-' }}</p>
                         <p><strong>Location:</strong> {{ $event->location ?? '-' }}</p>
                     </div>
-                    <p class="mt-8 whitespace-pre-line leading-8 text-[#2B2B2B]">{{ $event->description }}</p>
+                    <div class="mt-8 leading-8 text-[#2B2B2B]">{!! rich_text($event->description) !!}</div>
                 </div>
             </article>
 

@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\EventRequest;
 use App\Models\Event;
+use App\Models\Media;
+use App\Support\HtmlSanitizer;
+use App\Support\MediaLibrary;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -25,7 +27,9 @@ class EventController extends Controller
 
     public function create(): View
     {
-        return view('admin.events.create');
+        $mediaItems = Media::images()->latest()->take(80)->get();
+
+        return view('admin.events.create', compact('mediaItems'));
     }
 
     public function store(EventRequest $request): RedirectResponse
@@ -33,9 +37,12 @@ class EventController extends Controller
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['title']);
         $data['user_id'] = $request->user()->id;
+        $data['description'] = HtmlSanitizer::clean($data['description']);
+        $data['featured_image'] = MediaLibrary::imagePathFromRequest($request->input('featured_image_media_id')) ?? ($data['featured_image'] ?? null);
+        unset($data['featured_image_media_id']);
 
         if ($request->hasFile('featured_image')) {
-            $data['featured_image'] = $request->file('featured_image')->store('events', 'public');
+            $data['featured_image'] = MediaLibrary::store($request->file('featured_image'), $request->user()->id, $data['title'], 'events')->file_path;
         }
 
         Event::create($data);
@@ -52,17 +59,27 @@ class EventController extends Controller
 
     public function edit(Event $event): View
     {
-        return view('admin.events.edit', compact('event'));
+        $mediaItems = Media::images()->latest()->take(80)->get();
+
+        return view('admin.events.edit', compact('event', 'mediaItems'));
     }
 
     public function update(EventRequest $request, Event $event): RedirectResponse
     {
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['title'], $event->id);
+        $data['description'] = HtmlSanitizer::clean($data['description']);
+        $selectedImage = MediaLibrary::imagePathFromRequest($request->input('featured_image_media_id'));
+        unset($data['featured_image_media_id']);
+
+        if ($selectedImage) {
+            $this->deleteImage($event->featured_image);
+            $data['featured_image'] = $selectedImage;
+        }
 
         if ($request->hasFile('featured_image')) {
             $this->deleteImage($event->featured_image);
-            $data['featured_image'] = $request->file('featured_image')->store('events', 'public');
+            $data['featured_image'] = MediaLibrary::store($request->file('featured_image'), $request->user()->id, $data['title'], 'events')->file_path;
         }
 
         $event->update($data);
@@ -105,8 +122,6 @@ class EventController extends Controller
 
     private function deleteImage(?string $path): void
     {
-        if ($path) {
-            Storage::disk('public')->delete($path);
-        }
+        MediaLibrary::deleteIfUntracked($path);
     }
 }

@@ -18,7 +18,7 @@
                 <p class="text-sm font-semibold text-[#8B5E3C]">{{ $news->published_at?->format('M d, Y') }}</p>
                 <h1 class="mt-3 text-4xl font-semibold">{{ $news->title }}</h1>
                 <p class="mt-4 text-lg leading-8 text-[#5F584F]">{{ $news->short_description }}</p>
-                <div class="mt-8 whitespace-pre-line leading-8 text-[#2B2B2B]">{{ $news->content }}</div>
+                <div class="mt-8 leading-8 text-[#2B2B2B]">{!! rich_text($news->content) !!}</div>
             </article>
 
             <aside class="rounded-xl border border-[#E8DCCB] bg-white p-5 shadow-sm">

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Media;
 use App\Models\Page;
+use App\Support\HtmlSanitizer;
+use App\Support\MediaLibrary;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -25,7 +27,9 @@ class PageController extends Controller
 
     public function edit(Page $page): View
     {
-        return view('admin.pages.edit', compact('page'));
+        $mediaItems = Media::images()->latest()->take(80)->get();
+
+        return view('admin.pages.edit', compact('page', 'mediaItems'));
     }
 
     public function update(Request $request, Page $page): RedirectResponse
@@ -34,12 +38,21 @@ class PageController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'content' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'image_media_id' => ['nullable', 'exists:media,id'],
             'status' => ['required', 'in:draft,published'],
         ]);
+        $data['content'] = HtmlSanitizer::clean($data['content'] ?? null);
+        $selectedImage = MediaLibrary::imagePathFromRequest($request->input('image_media_id'));
+        unset($data['image_media_id']);
+
+        if ($selectedImage) {
+            MediaLibrary::deleteIfUntracked($page->image);
+            $data['image'] = $selectedImage;
+        }
 
         if ($request->hasFile('image')) {
-            Storage::disk('public')->delete($page->image);
-            $data['image'] = $request->file('image')->store('pages', 'public');
+            MediaLibrary::deleteIfUntracked($page->image);
+            $data['image'] = MediaLibrary::store($request->file('image'), $request->user()->id, $data['title'], 'pages')->file_path;
         }
 
         $page->update($data);

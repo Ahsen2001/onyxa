@@ -10,8 +10,10 @@
         ['label' => 'Events', 'route' => 'admin.events.index', 'active' => 'admin.events.*'],
         ['label' => 'Gallery', 'route' => 'admin.galleries.index', 'active' => 'admin.galleries.*'],
         ['label' => 'Gallery Categories', 'route' => 'admin.gallery-categories.index', 'active' => 'admin.gallery-categories.*'],
+        ['label' => 'Media Library', 'route' => 'admin.media.index', 'active' => 'admin.media.*'],
         ['label' => 'Messages', 'route' => 'admin.contact-messages.index', 'active' => 'admin.contact-messages.*'],
         ['label' => 'Pages', 'route' => 'admin.pages.index', 'active' => 'admin.pages.*'],
+        ['label' => 'SEO Meta', 'route' => 'admin.seo-meta.index', 'active' => 'admin.seo-meta.*'],
         ['label' => 'Settings', 'route' => 'admin.settings.index', 'active' => 'admin.settings.*'],
         ['label' => 'Profile', 'route' => 'admin.profile.edit', 'active' => 'admin.profile.*'],
     ];

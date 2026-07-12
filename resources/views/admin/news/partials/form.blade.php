@@ -10,12 +10,14 @@
     </div>
     <div>
         <label class="mb-2 block text-sm font-semibold">Content</label>
-        <textarea name="content" rows="10" required class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3 focus:border-[#8B5E3C] focus:outline-none">{{ old('content', $post?->content) }}</textarea>
+        <textarea name="content" rows="10" required data-ckeditor data-upload-url="{{ route('admin.ckeditor.upload', ['_token' => csrf_token()]) }}" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3 focus:border-[#8B5E3C] focus:outline-none">{{ old('content', $post?->content) }}</textarea>
     </div>
     <div class="grid gap-5 md:grid-cols-3">
         <div>
             <label class="mb-2 block text-sm font-semibold">Featured Image</label>
+            <x-ui.media-picker name="featured_image_media_id" label="Select Featured Image from Media Library" :current-path="$post?->featured_image" :media-items="$mediaItems ?? collect()" />
             <input type="file" name="featured_image" accept="image/*" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3">
+            <p class="mt-2 text-xs text-[#6F665A]">Uploading a new file will add it to the Media Library.</p>
         </div>
         <div>
             <label class="mb-2 block text-sm font-semibold">Status</label>

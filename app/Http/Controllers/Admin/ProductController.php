@@ -7,9 +7,11 @@ use App\Http\Requests\Admin\ProductRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
+use App\Models\Media;
+use App\Support\HtmlSanitizer;
+use App\Support\MediaLibrary;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -27,8 +29,9 @@ class ProductController extends Controller
     public function create(): View
     {
         $categories = ProductCategory::active()->ordered()->get();
+        $mediaItems = Media::images()->latest()->take(80)->get();
 
-        return view('admin.products.create', compact('categories'));
+        return view('admin.products.create', compact('categories', 'mediaItems'));
     }
 
     public function store(ProductRequest $request): RedirectResponse
@@ -36,9 +39,12 @@ class ProductController extends Controller
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['name']);
         $data['is_featured'] = $request->boolean('is_featured');
+        $data['description'] = HtmlSanitizer::clean($data['description'] ?? null);
+        $data['main_image'] = MediaLibrary::imagePathFromRequest($request->input('main_image_media_id')) ?? ($data['main_image'] ?? null);
+        unset($data['main_image_media_id'], $data['additional_media_ids']);
 
         if ($request->hasFile('main_image')) {
-            $data['main_image'] = $request->file('main_image')->store('products', 'public');
+            $data['main_image'] = MediaLibrary::store($request->file('main_image'), $request->user()->id, $data['name'], 'products')->file_path;
         }
 
         $product = Product::create($data);
@@ -60,8 +66,9 @@ class ProductController extends Controller
     {
         $product->load('images');
         $categories = ProductCategory::active()->ordered()->get();
+        $mediaItems = Media::images()->latest()->take(80)->get();
 
-        return view('admin.products.edit', compact('product', 'categories'));
+        return view('admin.products.edit', compact('product', 'categories', 'mediaItems'));
     }
 
     public function update(ProductRequest $request, Product $product): RedirectResponse
@@ -69,10 +76,18 @@ class ProductController extends Controller
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['name'], $product->id);
         $data['is_featured'] = $request->boolean('is_featured');
+        $data['description'] = HtmlSanitizer::clean($data['description'] ?? null);
+        $selectedMainImage = MediaLibrary::imagePathFromRequest($request->input('main_image_media_id'));
+        unset($data['main_image_media_id'], $data['additional_media_ids']);
+
+        if ($selectedMainImage) {
+            $this->deleteImage($product->main_image);
+            $data['main_image'] = $selectedMainImage;
+        }
 
         if ($request->hasFile('main_image')) {
             $this->deleteImage($product->main_image);
-            $data['main_image'] = $request->file('main_image')->store('products', 'public');
+            $data['main_image'] = MediaLibrary::store($request->file('main_image'), $request->user()->id, $data['name'], 'products')->file_path;
         }
 
         $product->update($data);
@@ -121,17 +136,36 @@ class ProductController extends Controller
 
     private function storeAdditionalImages(Request $request, Product $product): void
     {
+        $sortOrder = (int) $product->images()->max('sort_order');
+
+        foreach ((array) $request->input('additional_media_ids', []) as $mediaId) {
+            $path = MediaLibrary::imagePathFromRequest($mediaId);
+
+            if (! $path) {
+                continue;
+            }
+
+            $sortOrder++;
+
+            $product->images()->firstOrCreate(
+                ['image' => $path],
+                [
+                    'alt_text' => $product->name,
+                    'sort_order' => $sortOrder,
+                ]
+            );
+        }
+
         if (! $request->hasFile('additional_images')) {
             return;
         }
 
-        $sortOrder = (int) $product->images()->max('sort_order');
-
         foreach ($request->file('additional_images') as $image) {
             $sortOrder++;
+            $media = MediaLibrary::store($image, $request->user()->id, $product->name, 'products');
 
             $product->images()->create([
-                'image' => $image->store('products', 'public'),
+                'image' => $media->file_path,
                 'alt_text' => $product->name,
                 'sort_order' => $sortOrder,
             ]);
@@ -156,8 +190,6 @@ class ProductController extends Controller
 
     private function deleteImage(?string $path): void
     {
-        if ($path) {
-            Storage::disk('public')->delete($path);
-        }
+        MediaLibrary::deleteIfUntracked($path);
     }
 }

@@ -1,6 +1,50 @@
 @extends('layouts.admin')
-@section('title','Edit Page Section')
-@section('page-title','Edit Page Section')
+
+@section('title', 'Edit Page Section')
+@section('page-title', 'Edit Page Section')
+
 @section('content')
-    <form method="POST" action="{{ route('admin.pages.update',$page) }}" enctype="multipart/form-data" class="rounded-xl border border-[#E8DCCB] bg-white p-6 shadow-sm">@csrf @method('PUT')<div class="grid gap-5"><p class="text-sm font-semibold uppercase tracking-[0.16em] text-[#8B5E3C]">{{ $page->page_key }} / {{ $page->section_key }}</p><div><label class="mb-2 block text-sm font-semibold">Title</label><input name="title" value="{{ old('title',$page->title) }}" required class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3"></div><div><label class="mb-2 block text-sm font-semibold">Content</label><textarea name="content" rows="9" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3">{{ old('content',$page->content) }}</textarea></div><div class="grid gap-5 md:grid-cols-2"><div><label class="mb-2 block text-sm font-semibold">Image</label><input type="file" name="image" accept="image/*" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3">@if($page->image)<img src="{{ asset('storage/'.$page->image) }}" class="mt-3 h-32 w-48 rounded-lg object-cover">@endif</div><div><label class="mb-2 block text-sm font-semibold">Status</label><select name="status" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3"><option value="published" @selected(old('status',$page->status)==='published')>Published</option><option value="draft" @selected(old('status',$page->status)==='draft')>Draft</option></select></div></div><div class="flex gap-3"><button class="rounded-lg bg-[#8B5E3C] px-5 py-3 text-sm font-semibold text-white">Save Section</button><a href="{{ route('admin.pages.index') }}" class="rounded-lg border border-[#DCC9AD] px-5 py-3 text-sm font-semibold text-[#8B5E3C]">Cancel</a></div></div></form>
+    <form method="POST" action="{{ route('admin.pages.update', $page) }}" enctype="multipart/form-data" class="rounded-xl border border-[#E8DCCB] bg-white p-6 shadow-sm">
+        @csrf
+        @method('PUT')
+
+        <div class="grid gap-5">
+            <p class="text-sm font-semibold uppercase tracking-[0.16em] text-[#8B5E3C]">{{ $page->page_key }} / {{ $page->section_key }}</p>
+
+            <div>
+                <label class="mb-2 block text-sm font-semibold">Title</label>
+                <input name="title" value="{{ old('title', $page->title) }}" required class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3">
+            </div>
+
+            <div>
+                <label class="mb-2 block text-sm font-semibold">Content</label>
+                <textarea name="content" rows="9" data-ckeditor data-upload-url="{{ route('admin.ckeditor.upload', ['_token' => csrf_token()]) }}" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3">{{ old('content', $page->content) }}</textarea>
+            </div>
+
+            <div class="grid gap-5 md:grid-cols-2">
+                <div>
+                    <label class="mb-2 block text-sm font-semibold">Image</label>
+                    <x-ui.media-picker name="image_media_id" label="Select Page Image from Media Library" :current-path="$page->image" :media-items="$mediaItems ?? collect()" />
+                    <input type="file" name="image" accept="image/*" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3">
+                    <p class="mt-2 text-xs text-[#6F665A]">Uploading a new file will add it to the Media Library.</p>
+                    @if ($page->image)
+                        <img src="{{ asset('storage/'.$page->image) }}" alt="{{ $page->title }}" class="mt-3 h-32 w-48 rounded-lg object-cover">
+                    @endif
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-sm font-semibold">Status</label>
+                    <select name="status" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3">
+                        <option value="published" @selected(old('status', $page->status) === 'published')>Published</option>
+                        <option value="draft" @selected(old('status', $page->status) === 'draft')>Draft</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button class="rounded-lg bg-[#8B5E3C] px-5 py-3 text-sm font-semibold text-white">Save Section</button>
+                <a href="{{ route('admin.pages.index') }}" class="rounded-lg border border-[#DCC9AD] px-5 py-3 text-sm font-semibold text-[#8B5E3C]">Cancel</a>
+            </div>
+        </div>
+    </form>
 @endsection

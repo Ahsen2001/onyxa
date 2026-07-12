@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\NewsRequest;
+use App\Models\Media;
 use App\Models\News;
+use App\Support\HtmlSanitizer;
+use App\Support\MediaLibrary;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -22,7 +24,9 @@ class NewsController extends Controller
 
     public function create(): View
     {
-        return view('admin.news.create');
+        $mediaItems = Media::images()->latest()->take(80)->get();
+
+        return view('admin.news.create', compact('mediaItems'));
     }
 
     public function store(NewsRequest $request): RedirectResponse
@@ -30,12 +34,15 @@ class NewsController extends Controller
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['title']);
         $data['user_id'] = $request->user()->id;
+        $data['content'] = HtmlSanitizer::clean($data['content']);
         $data['published_at'] = $data['status'] === 'published'
             ? ($data['published_at'] ?? now())
             : $data['published_at'];
+        $data['featured_image'] = MediaLibrary::imagePathFromRequest($request->input('featured_image_media_id')) ?? ($data['featured_image'] ?? null);
+        unset($data['featured_image_media_id']);
 
         if ($request->hasFile('featured_image')) {
-            $data['featured_image'] = $request->file('featured_image')->store('news', 'public');
+            $data['featured_image'] = MediaLibrary::store($request->file('featured_image'), $request->user()->id, $data['title'], 'news')->file_path;
         }
 
         News::create($data);
@@ -52,20 +59,30 @@ class NewsController extends Controller
 
     public function edit(News $news): View
     {
-        return view('admin.news.edit', compact('news'));
+        $mediaItems = Media::images()->latest()->take(80)->get();
+
+        return view('admin.news.edit', compact('news', 'mediaItems'));
     }
 
     public function update(NewsRequest $request, News $news): RedirectResponse
     {
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['title'], $news->id);
+        $data['content'] = HtmlSanitizer::clean($data['content']);
         $data['published_at'] = $data['status'] === 'published'
             ? ($data['published_at'] ?? now())
             : $data['published_at'];
+        $selectedImage = MediaLibrary::imagePathFromRequest($request->input('featured_image_media_id'));
+        unset($data['featured_image_media_id']);
+
+        if ($selectedImage) {
+            $this->deleteImage($news->featured_image);
+            $data['featured_image'] = $selectedImage;
+        }
 
         if ($request->hasFile('featured_image')) {
             $this->deleteImage($news->featured_image);
-            $data['featured_image'] = $request->file('featured_image')->store('news', 'public');
+            $data['featured_image'] = MediaLibrary::store($request->file('featured_image'), $request->user()->id, $data['title'], 'news')->file_path;
         }
 
         $news->update($data);
@@ -113,8 +130,6 @@ class NewsController extends Controller
 
     private function deleteImage(?string $path): void
     {
-        if ($path) {
-            Storage::disk('public')->delete($path);
-        }
+        MediaLibrary::deleteIfUntracked($path);
     }
 }

@@ -15,6 +15,6 @@
         <p class="text-sm text-[#6F665A]">{{ $news->published_at?->format('M d, Y') }} by {{ $news->user?->name ?? 'Admin' }}</p>
         <span class="mt-3 inline-flex rounded-full px-3 py-1 text-xs font-semibold {{ $news->status === 'published' ? 'bg-[#2E7D32]/10 text-[#2E7D32]' : 'bg-gray-100 text-gray-600' }}">{{ ucfirst($news->status) }}</span>
         <p class="mt-5 text-lg leading-8 text-[#5F584F]">{{ $news->short_description }}</p>
-        <div class="mt-8 whitespace-pre-line leading-8">{{ $news->content }}</div>
+        <div class="mt-8 leading-8">{!! rich_text($news->content) !!}</div>
     </article>
 @endsection

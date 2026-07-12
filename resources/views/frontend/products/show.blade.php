@@ -41,7 +41,7 @@
 
                     <div class="mt-8">
                         <h2 class="text-xl font-semibold">Description</h2>
-                        <p class="mt-3 whitespace-pre-line leading-8 text-[#5F584F]">{{ $product->description }}</p>
+                        <div class="mt-3 leading-8 text-[#5F584F]">{!! rich_text($product->description) !!}</div>
                     </div>
 
                     <div class="mt-8 grid gap-3 sm:flex sm:flex-wrap">

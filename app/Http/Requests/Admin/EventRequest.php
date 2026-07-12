@@ -18,11 +18,12 @@ class EventRequest extends FormRequest
 
         return [
             'title' => ['required', 'string', 'max:255', 'not_regex:/<script\b/i', Rule::unique('events', 'title')->ignore($event?->id)],
-            'description' => ['required', 'string', 'max:15000', 'not_regex:/<script\b/i'],
+            'description' => ['required', 'string', 'max:15000'],
             'event_date' => ['required', 'date'],
             'event_time' => ['nullable', 'date_format:H:i'],
             'location' => ['nullable', 'string', 'max:255', 'not_regex:/<script\b/i'],
             'featured_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'featured_image_media_id' => ['nullable', 'exists:media,id'],
             'status' => ['required', Rule::in(['upcoming', 'completed', 'cancelled'])],
         ];
     }

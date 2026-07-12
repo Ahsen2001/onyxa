@@ -7,6 +7,6 @@
         @if ($event->featured_image)<img src="{{ asset('storage/'.$event->featured_image) }}" alt="{{ $event->title }}" class="mb-6 aspect-[16/7] w-full rounded-xl object-cover">@endif
         <span class="rounded-full bg-[#2E7D32]/10 px-3 py-1 text-xs font-semibold text-[#2E7D32]">{{ ucfirst($event->status) }}</span>
         <p class="mt-5 text-[#6F665A]">{{ $event->event_date?->format('M d, Y') }} @if($event->event_time) at {{ substr($event->event_time, 0, 5) }} @endif - {{ $event->location }}</p>
-        <div class="mt-8 whitespace-pre-line leading-8">{{ $event->description }}</div>
+        <div class="mt-8 leading-8">{!! rich_text($event->description) !!}</div>
     </article>
 @endsection

@@ -39,7 +39,7 @@
 
             <div class="mt-6">
                 <h3 class="font-semibold">Description</h3>
-                <p class="mt-2 whitespace-pre-line leading-7 text-[#5F584F]">{{ $product->description ?? '-' }}</p>
+                <div class="mt-2 leading-7 text-[#5F584F]">{!! rich_text($product->description) ?: '-' !!}</div>
             </div>
         </section>
     </div>

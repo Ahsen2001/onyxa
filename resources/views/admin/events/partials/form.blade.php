@@ -6,7 +6,7 @@
     </div>
     <div>
         <label class="mb-2 block text-sm font-semibold">Description</label>
-        <textarea name="description" rows="9" required class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3 focus:border-[#8B5E3C] focus:outline-none">{{ old('description', $event?->description) }}</textarea>
+        <textarea name="description" rows="9" required data-ckeditor data-upload-url="{{ route('admin.ckeditor.upload', ['_token' => csrf_token()]) }}" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3 focus:border-[#8B5E3C] focus:outline-none">{{ old('description', $event?->description) }}</textarea>
     </div>
     <div class="grid gap-5 md:grid-cols-4">
         <div><label class="mb-2 block text-sm font-semibold">Date</label><input type="date" name="event_date" value="{{ old('event_date', $event?->event_date?->format('Y-m-d')) }}" required class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3"></div>
@@ -16,7 +16,9 @@
     </div>
     <div>
         <label class="mb-2 block text-sm font-semibold">Featured Image</label>
+        <x-ui.media-picker name="featured_image_media_id" label="Select Featured Image from Media Library" :current-path="$event?->featured_image" :media-items="$mediaItems ?? collect()" />
         <input type="file" name="featured_image" accept="image/*" class="w-full rounded-lg border border-[#DCC9AD] px-4 py-3">
+        <p class="mt-2 text-xs text-[#6F665A]">Uploading a new file will add it to the Media Library.</p>
         @if ($event?->featured_image)<img src="{{ asset('storage/'.$event->featured_image) }}" alt="{{ $event->title }}" class="mt-3 h-32 w-48 rounded-lg object-cover">@endif
     </div>
     <div class="flex flex-wrap gap-3">

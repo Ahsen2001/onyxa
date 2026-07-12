@@ -19,8 +19,9 @@ class NewsRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255', 'not_regex:/<script\b/i', Rule::unique('news', 'title')->ignore($news?->id)],
             'short_description' => ['nullable', 'string', 'max:500', 'not_regex:/<script\b/i'],
-            'content' => ['required', 'string', 'max:20000', 'not_regex:/<script\b/i'],
+            'content' => ['required', 'string', 'max:20000'],
             'featured_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'featured_image_media_id' => ['nullable', 'exists:media,id'],
             'status' => ['required', Rule::in(['draft', 'published'])],
             'published_at' => ['nullable', 'date'],
         ];
